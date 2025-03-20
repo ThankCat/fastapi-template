@@ -1,0 +1,6 @@
+__pycache__/
+.env
+log/
+alembic/versions/
+static/media/
+celerybeat-schedule.*
