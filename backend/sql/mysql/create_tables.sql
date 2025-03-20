@@ -1,3 +1,4 @@
+-- Active: 1742439392746@@127.0.0.1@3306@fba
 create table sys_api
 (
     id           int auto_increment comment '主键id'

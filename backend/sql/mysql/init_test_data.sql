@@ -1,3 +1,4 @@
+-- Active: 1742439392746@@127.0.0.1@3306@fba
 insert into sys_dept (id, name, sort, leader, phone, email, status, del_flag, parent_id, created_time, updated_time)
 values  (1, 'test', 0, null, null, null, 1, 0, null, '2023-06-26 17:13:45', null);
 

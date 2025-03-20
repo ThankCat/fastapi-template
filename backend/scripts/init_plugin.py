@@ -7,10 +7,10 @@ from backend.plugin.tools import install_requirements_async
 
 
 async def init() -> None:
-    print('Starting initial plugin')
+    print("Starting initial plugin")
     await install_requirements_async()
-    print('Plugin successfully installed')
+    print("Plugin successfully installed")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run(init)  # type: ignore
