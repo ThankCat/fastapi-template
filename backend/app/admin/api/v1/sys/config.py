@@ -21,72 +21,72 @@ from backend.database.db import CurrentSession
 router = APIRouter()
 
 
-@router.get('/website', summary='获取网站配置信息', dependencies=[DependsJwtAuth])
-async def get_website_config() -> ResponseSchemaModel[GetConfigDetail]:
-    config = await config_service.get_built_in_config('website')
+@router.get("/website", summary="获取网站配置信息", dependencies=[DependsJwtAuth])
+async def get_website_config() -> ResponseSchemaModel[list[GetConfigDetail]]:
+    config = await config_service.get_built_in_config("website")
     return response_base.success(data=config)
 
 
 @router.post(
-    '/website',
-    summary='保存网站配置信息',
+    "/website",
+    summary="保存网站配置信息",
     dependencies=[
-        Depends(RequestPermission('sys:config:website:add')),
+        Depends(RequestPermission("sys:config:website:add")),
         DependsRBAC,
     ],
 )
 async def save_website_config(objs: list[SaveBuiltInConfigParam]) -> ResponseModel:
-    await config_service.save_built_in_config(objs, 'website')
+    await config_service.save_built_in_config(objs, "website")
     return response_base.success()
 
 
-@router.get('/protocol', summary='获取用户协议', dependencies=[DependsJwtAuth])
-async def get_protocol_config() -> ResponseSchemaModel[GetConfigDetail]:
-    config = await config_service.get_built_in_config('protocol')
+@router.get("/protocol", summary="获取用户协议", dependencies=[DependsJwtAuth])
+async def get_protocol_config() -> ResponseSchemaModel[list[GetConfigDetail]]:
+    config = await config_service.get_built_in_config("protocol")
     return response_base.success(data=config)
 
 
 @router.post(
-    '/protocol',
-    summary='保存用户协议',
+    "/protocol",
+    summary="保存用户协议",
     dependencies=[
-        Depends(RequestPermission('sys:config:protocol:add')),
+        Depends(RequestPermission("sys:config:protocol:add")),
         DependsRBAC,
     ],
 )
 async def save_protocol_config(objs: list[SaveBuiltInConfigParam]) -> ResponseModel:
-    await config_service.save_built_in_config(objs, 'protocol')
+    await config_service.save_built_in_config(objs, "protocol")
     return response_base.success()
 
 
-@router.get('/policy', summary='获取用户政策', dependencies=[DependsJwtAuth])
-async def get_policy_config() -> ResponseSchemaModel[GetConfigDetail]:
-    config = await config_service.get_built_in_config('policy')
+@router.get("/policy", summary="获取用户政策", dependencies=[DependsJwtAuth])
+async def get_policy_config() -> ResponseSchemaModel[list[GetConfigDetail]]:
+    config = await config_service.get_built_in_config("policy")
     return response_base.success(data=config)
 
 
 @router.post(
-    '/policy',
-    summary='保存用户政策',
+    "/policy",
+    summary="保存用户政策",
     dependencies=[
-        Depends(RequestPermission('sys:config:policy:add')),
+        Depends(RequestPermission("sys:config:policy:add")),
         DependsRBAC,
     ],
 )
 async def save_policy_config(objs: list[SaveBuiltInConfigParam]) -> ResponseModel:
-    await config_service.save_built_in_config(objs, 'policy')
+    await config_service.save_built_in_config(objs, "policy")
     return response_base.success()
 
 
-@router.get('/{pk}', summary='获取系统参数配置详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取系统参数配置详情", dependencies=[DependsJwtAuth])
 async def get_config(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetConfigDetail]:
     config = await config_service.get(pk)
     return response_base.success(data=config)
 
 
 @router.get(
-    '',
-    summary='（模糊条件）分页获取所有系统参数配置',
+    "",
+    summary="（模糊条件）分页获取所有系统参数配置",
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -103,10 +103,10 @@ async def get_pagination_config(
 
 
 @router.post(
-    '',
-    summary='创建系统参数配置',
+    "",
+    summary="创建系统参数配置",
     dependencies=[
-        Depends(RequestPermission('sys:config:add')),
+        Depends(RequestPermission("sys:config:add")),
         DependsRBAC,
     ],
 )
@@ -116,10 +116,10 @@ async def create_config(obj: CreateConfigParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新系统参数配置',
+    "/{pk}",
+    summary="更新系统参数配置",
     dependencies=[
-        Depends(RequestPermission('sys:config:edit')),
+        Depends(RequestPermission("sys:config:edit")),
         DependsRBAC,
     ],
 )
@@ -131,10 +131,10 @@ async def update_config(pk: Annotated[int, Path(...)], obj: UpdateConfigParam) -
 
 
 @router.delete(
-    '',
-    summary='（批量）删除系统参数配置',
+    "",
+    summary="（批量）删除系统参数配置",
     dependencies=[
-        Depends(RequestPermission('sys:config:del')),
+        Depends(RequestPermission("sys:config:del")),
         DependsRBAC,
     ],
 )
