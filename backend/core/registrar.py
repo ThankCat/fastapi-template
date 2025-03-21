@@ -98,7 +98,7 @@ def register_logger() -> None:
 
     :return:
     """
-    setup_logging()
+    setup_logging()  # 启动日志
     set_custom_logfile()
 
 
@@ -112,10 +112,10 @@ def register_static_file(app: FastAPI):
     # 上传静态资源
     if not os.path.exists(UPLOAD_DIR):
         os.makedirs(UPLOAD_DIR)
-    app.mount('/static/upload', StaticFiles(directory=UPLOAD_DIR), name='upload')
+    app.mount("/static/upload", StaticFiles(directory=UPLOAD_DIR), name="upload")
     # 固有静态资源
     if settings.FASTAPI_STATIC_FILES:
-        app.mount('/static', StaticFiles(directory=STATIC_DIR), name='static')
+        app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 def register_middleware(app: FastAPI):
@@ -148,31 +148,32 @@ def register_middleware(app: FastAPI):
             CORSMiddleware,
             allow_origins=settings.CORS_ALLOWED_ORIGINS,
             allow_credentials=True,
-            allow_methods=['*'],
-            allow_headers=['*'],
+            allow_methods=["*"],
+            allow_headers=["*"],
             expose_headers=settings.CORS_EXPOSE_HEADERS,
         )
 
 
 def register_router(app: FastAPI):
     """
-    路由
+    注册路由
 
     :param app: FastAPI
     :return:
     """
-    dependencies = [Depends(demo_site)] if settings.DEMO_MODE else None
+    dependencies = [Depends(demo_site)] if settings.DEMO_MODE else None  # 是否为路由添加demo_site依赖
 
     # API
-    plugin_router_inject()
+    plugin_router_inject()  # 注入插件路由
 
     from backend.app.router import router  # 必须在插件路由注入后导入
 
-    app.include_router(router, dependencies=dependencies)
+    # 确保了应用的路由模块在导入时已经包含所有插件的路由，从而保证应用的完整性和动态扩展能力。
+    app.include_router(router, dependencies=dependencies)  # 注册路由
 
     # Extra
-    ensure_unique_route_names(app)
-    simplify_operation_ids(app)
+    ensure_unique_route_names(app)  # 确保路由名称唯一
+    simplify_operation_ids(app)  # 简化操作 ID
 
 
 def register_page(app: FastAPI):
@@ -187,7 +188,7 @@ def register_page(app: FastAPI):
 
 def register_socket_app(app: FastAPI):
     """
-    socket 应用
+    注册 socket 应用
 
     :param app:
     :return:
@@ -195,9 +196,9 @@ def register_socket_app(app: FastAPI):
     from backend.common.socketio.server import sio
 
     socket_app = socketio.ASGIApp(
-        socketio_server=sio,
-        other_asgi_app=app,
-        # 切勿删除此配置：https://github.com/pyropy/fastapi-socketio/issues/51
-        socketio_path='/ws/socket.io',
+        socketio_server=sio,  # 指定 Socket.IO 服务器实例
+        other_asgi_app=app,  # 指定 FastAPI 应用 app 作为其他 ASGI 应用
+        # 切勿删除此配置：因为它是 Socket.IO 协议的一部分，确保客户端和服务器之间的通信正常。:https://github.com/pyropy/fastapi-socketio/issues/51
+        socketio_path="/ws/socket.io",  # - 指定 Socket.IO 的路径。
     )
-    app.mount('/ws', socket_app)
+    app.mount("/ws", socket_app)  # 挂载 Socket.IO 应用

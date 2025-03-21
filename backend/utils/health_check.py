@@ -15,11 +15,11 @@ def ensure_unique_route_names(app: FastAPI) -> None:
     :param app:
     :return:
     """
-    temp_routes = set()
-    for route in app.routes:
-        if isinstance(route, APIRoute):
-            if route.name in temp_routes:
-                raise ValueError(f'Non-unique route name: {route.name}')
+    temp_routes = set()  # 创建一个空的集合，用于存储路由名称
+    for route in app.routes:  # 遍历所有路由
+        if isinstance(route, APIRoute):  # 如果是 APIRoute 类型
+            if route.name in temp_routes:  # 如果路由名称已经存在于集合中
+                raise ValueError(f"Non-unique route name: {route.name}")
             temp_routes.add(route.name)
 
 
@@ -33,4 +33,4 @@ async def http_limit_callback(request: Request, response: Response, expire: int)
     :return:
     """
     expires = ceil(expire / 1000)
-    raise errors.HTTPError(code=429, msg='请求过于频繁，请稍后重试', headers={'Retry-After': str(expires)})
+    raise errors.HTTPError(code=429, msg="请求过于频繁，请稍后重试", headers={"Retry-After": str(expires)})

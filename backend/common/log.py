@@ -36,17 +36,25 @@ class InterceptHandler(logging.Handler):
 
 def setup_logging():
     """
+    设置和配置日志系统
     From https://github.com/benoitc/gunicorn/issues/1572#issuecomment-638391953
     https://github.com/pawamoy/pawamoy.github.io/issues/17
     """
     # Set the logging handler and level
-    logging.root.handlers = [InterceptHandler()]
-    logging.root.setLevel(settings.LOG_STD_LEVEL)
+    logging.root.handlers = [InterceptHandler()]  # 设置日志拦截器
+    logging.root.setLevel(settings.LOG_STD_LEVEL)  # 设置日志级别
 
     # Remove all log handlers and propagate to root logger
-    for name in logging.root.manager.loggerDict.keys():
-        logging.getLogger(name).handlers = []
-        if 'uvicorn.access' in name or 'watchfiles.main' in name:
+    for name in logging.root.manager.loggerDict.keys():  # 获取所有已注册的日志器名称
+        logging.getLogger(name).handlers = []  # 移除所有已注册的日志器的处理程序
+
+        """
+        propagate 属性控制日志消息是否向上传播到父日志器：
+        - 当 propagate = True 时，日志消息会传递给父日志器
+        - 当 propagate = False 时，日志消息在当前日志器处理后就停止传播
+        """
+        # TODO:继续研究
+        if "uvicorn.access" in name or "watchfiles.main" in name:
             logging.getLogger(name).propagate = False
         else:
             logging.getLogger(name).propagate = True
@@ -58,7 +66,7 @@ def setup_logging():
     # https://github.com/snok/asgi-correlation-id/issues/7
     def correlation_id_filter(record):
         cid = correlation_id.get(settings.LOG_CID_DEFAULT_VALUE)
-        record['correlation_id'] = cid[: settings.LOG_CID_UUID_LENGTH]
+        record["correlation_id"] = cid[: settings.LOG_CID_UUID_LENGTH]
         return record
 
     # Remove default loguru logger
@@ -68,10 +76,10 @@ def setup_logging():
     logger.configure(
         handlers=[
             {
-                'sink': sys.stdout,
-                'level': settings.LOG_STD_LEVEL,
-                'filter': lambda record: correlation_id_filter(record),
-                'format': settings.LOG_STD_FORMAT,
+                "sink": sys.stdout,
+                "level": settings.LOG_STD_LEVEL,
+                "filter": lambda record: correlation_id_filter(record),
+                "format": settings.LOG_STD_FORMAT,
             }
         ]
     )
@@ -89,18 +97,18 @@ def set_custom_logfile():
     # set loguru logger default config
     # https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
     log_config = {
-        'format': settings.LOG_FILE_FORMAT,
-        'enqueue': True,
-        'rotation': '5 MB',
-        'retention': '7 days',
-        'compression': 'tar.gz',
+        "format": settings.LOG_FILE_FORMAT,
+        "enqueue": True,
+        "rotation": "5 MB",
+        "retention": "7 days",
+        "compression": "tar.gz",
     }
 
     # stdout file
     logger.add(
         str(log_access_file),
         level=settings.LOG_ACCESS_FILE_LEVEL,
-        filter=lambda record: record['level'].no <= 25,
+        filter=lambda record: record["level"].no <= 25,
         backtrace=False,
         diagnose=False,
         **log_config,
@@ -110,7 +118,7 @@ def set_custom_logfile():
     logger.add(
         str(log_error_file),
         level=settings.LOG_ERROR_FILE_LEVEL,
-        filter=lambda record: record['level'].no >= 30,
+        filter=lambda record: record["level"].no >= 30,
         backtrace=True,
         diagnose=True,
         **log_config,

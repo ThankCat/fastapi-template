@@ -13,4 +13,4 @@ def simplify_operation_ids(app: FastAPI) -> None:
     """
     for route in app.routes:
         if isinstance(route, APIRoute):
-            route.operation_id = route.name
+            route.operation_id = route.name  # 给route新增operation_id属性 = route.name
