@@ -99,6 +99,7 @@ def register_logger() -> None:
     :return:
     """
     setup_logging()  # 启动日志
+    # TODO 研究如何设置自定义日志
     set_custom_logfile()
 
 
