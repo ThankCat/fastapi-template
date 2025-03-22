@@ -99,7 +99,6 @@ def register_logger() -> None:
     :return:
     """
     setup_logging()  # 启动日志
-    # TODO 研究如何设置自定义日志
     set_custom_logfile()
 
 
@@ -128,19 +127,32 @@ def register_middleware(app: FastAPI):
     """
     # Opera log (required)
     app.add_middleware(OperaLogMiddleware)
+
     # JWT auth (required)
     app.add_middleware(
-        AuthenticationMiddleware, backend=JwtAuthMiddleware(), on_error=JwtAuthMiddleware.auth_exception_handler
+        AuthenticationMiddleware,
+        backend=JwtAuthMiddleware(),
+        on_error=JwtAuthMiddleware.auth_exception_handler,
     )
+
     # Access log
     if settings.MIDDLEWARE_ACCESS:
         from backend.middleware.access_middleware import AccessMiddleware
 
         app.add_middleware(AccessMiddleware)
+
     # State
+    # TODO:待学习
     app.add_middleware(StateMiddleware)
+
     # Trace ID (required)
-    app.add_middleware(CorrelationIdMiddleware, validator=False)
+    # 参考 https://github.com/snok/asgi-correlation-id
+    app.add_middleware(
+        CorrelationIdMiddleware,
+        # header_name=settings.TEST_TRACE_ID,
+        validator=False,
+    )
+
     # CORS: Always at the end
     if settings.MIDDLEWARE_CORS:
         from fastapi.middleware.cors import CORSMiddleware
@@ -162,7 +174,9 @@ def register_router(app: FastAPI):
     :param app: FastAPI
     :return:
     """
-    dependencies = [Depends(demo_site)] if settings.DEMO_MODE else None  # 是否为路由添加demo_site依赖
+    dependencies = (
+        [Depends(demo_site)] if settings.DEMO_MODE else None
+    )  # 是否为路由添加demo_site依赖
 
     # API
     plugin_router_inject()  # 注入插件路由
