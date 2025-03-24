@@ -9,7 +9,12 @@ from backend.app.admin.schema.opera_log import CreateOperaLogParam
 
 
 class CRUDOperaLogDao(CRUDPlus[OperaLog]):
-    async def get_list(self, username: str | None = None, status: int | None = None, ip: str | None = None) -> Select:
+    async def get_list(
+        self,
+        username: str | None = None,
+        status: int | None = None,
+        ip: str | None = None,
+    ) -> Select:
         """
         获取操作日志列表
 
@@ -18,26 +23,14 @@ class CRUDOperaLogDao(CRUDPlus[OperaLog]):
         :param ip:
         :return:
         """
-        # filters = {}
-        # if username is not None:
-        #     filters.update(username=f"%{username}%")
-        # if status is not None:
-        #     filters.update(status=status)
-        # if ip is not None:
-        #     filters.update(ip=f"%{ip}%")
-        # return await self.select_order("created_time", "desc", **filters)
-
-        # TODO:这里模糊查询有点问题
-        stmt = await self.select()
+        filters = {}
         if username is not None:
-            stmt = stmt.where(self.model.username.like(f"%{username}%"))
+            filters.update(username__like=f"%{username}%")
         if status is not None:
-            stmt = stmt.where(self.model.status == status)
+            filters.update(status=status)
         if ip is not None:
-            stmt = stmt.where(self.model.ip.like(f"%{ip}%"))
-
-        print(stmt)
-        return stmt.order_by(self.model.created_time.desc())
+            filters.update(ip__like=f"%{ip}%")
+        return await self.select_order("created_time", "desc", **filters)
 
     async def create(self, db: AsyncSession, obj_in: CreateOperaLogParam) -> None:
         """

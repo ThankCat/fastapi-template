@@ -29,7 +29,7 @@ class ConfigService:
                 config = await config_dao.get_by_key_and_type(db, obj.key, type)
                 if config is None:
                     if await config_dao.get_by_key(db, obj.key, built_in=True):
-                        raise errors.ForbiddenError(msg=f'参数配置 {obj.key} 已存在')
+                        raise errors.ForbiddenError(msg=f"参数配置 {obj.key} 已存在")
                     await config_dao.create_model(db, obj, flush=True, type=type)
                 else:
                     await config_dao.update_model(db, config.id, obj, type=type)
@@ -39,7 +39,7 @@ class ConfigService:
         async with async_db_session() as db:
             config = await config_dao.get(db, pk)
             if not config:
-                raise errors.NotFoundError(msg='参数配置不存在')
+                raise errors.NotFoundError(msg="参数配置不存在")
             return config
 
     @staticmethod
@@ -50,10 +50,10 @@ class ConfigService:
     async def create(*, obj: CreateConfigParam) -> None:
         async with async_db_session.begin() as db:
             if obj.type in admin_settings.CONFIG_BUILT_IN_TYPES:
-                raise errors.ForbiddenError(msg='非法类型参数')
+                raise errors.ForbiddenError(msg="非法类型参数")
             config = await config_dao.get_by_key(db, obj.key)
             if config:
-                raise errors.ForbiddenError(msg=f'参数配置 {obj.key} 已存在')
+                raise errors.ForbiddenError(msg=f"参数配置 {obj.key} 已存在")
             await config_dao.create(db, obj)
 
     @staticmethod
@@ -61,7 +61,7 @@ class ConfigService:
         async with async_db_session.begin() as db:
             config = await config_dao.get(db, pk)
             if not config:
-                raise errors.NotFoundError(msg='参数配置不存在')
+                raise errors.NotFoundError(msg="参数配置不存在")
             count = await config_dao.update(db, pk, obj)
             return count
 
