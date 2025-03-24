@@ -99,8 +99,7 @@ def register_logger() -> None:
     :return:
     """
     setup_logging()  # 启动日志
-    # TODO 研究如何设置自定义日志
-    set_custom_logfile()
+    set_custom_logfile()  # 自定义日志文件
 
 
 def register_static_file(app: FastAPI):
@@ -111,8 +110,9 @@ def register_static_file(app: FastAPI):
     :return:
     """
     # 上传静态资源
-    if not os.path.exists(UPLOAD_DIR):
+    if not os.path.exists(UPLOAD_DIR):  # 如果目录不存在，则创建目录
         os.makedirs(UPLOAD_DIR)
+    # 上传目录 http://your-domain.com/static/upload/example.jpg
     app.mount("/static/upload", StaticFiles(directory=UPLOAD_DIR), name="upload")
     # 固有静态资源
     if settings.FASTAPI_STATIC_FILES:
@@ -127,21 +127,27 @@ def register_middleware(app: FastAPI):
     :return:
     """
     # Opera log (required)
-    app.add_middleware(OperaLogMiddleware)
+    app.add_middleware(OperaLogMiddleware)  # 操作日志中间件
+
     # JWT auth (required)
     app.add_middleware(
         AuthenticationMiddleware, backend=JwtAuthMiddleware(), on_error=JwtAuthMiddleware.auth_exception_handler
     )
+
     # Access log
     if settings.MIDDLEWARE_ACCESS:
         from backend.middleware.access_middleware import AccessMiddleware
 
         app.add_middleware(AccessMiddleware)
+
     # State
     app.add_middleware(StateMiddleware)
+
     # Trace ID (required)
     app.add_middleware(CorrelationIdMiddleware, validator=False)
+
     # CORS: Always at the end
+    # TODO:需要完善注释
     if settings.MIDDLEWARE_CORS:
         from fastapi.middleware.cors import CORSMiddleware
 

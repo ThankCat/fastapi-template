@@ -133,42 +133,54 @@ def setup_logging():
 
 
 def set_custom_logfile():
-    log_path = path_conf.LOG_DIR
-    if not os.path.exists(log_path):
+    """
+    设置自定义日志文件
+    """
+    log_path = path_conf.LOG_DIR  # 获取日志目录路径
+    if not os.path.exists(log_path):  # 如果不存在就创建
         os.mkdir(log_path)
 
     # log files
-    log_access_file = os.path.join(log_path, settings.LOG_ACCESS_FILENAME)
-    log_error_file = os.path.join(log_path, settings.LOG_ERROR_FILENAME)
+    log_access_file = os.path.join(log_path, settings.LOG_ACCESS_FILENAME)  # 获取访问日志文件路径
+    log_error_file = os.path.join(log_path, settings.LOG_ERROR_FILENAME)  # 获取错误日志文件路径
 
     # set loguru logger default config
     # https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
+    # 设置 loguru 日志记录器的通用配置
     log_config = {
-        "format": settings.LOG_FILE_FORMAT,
-        "enqueue": True,
-        "rotation": "5 MB",
-        "retention": "7 days",
-        "compression": "tar.gz",
+        "format": settings.LOG_FILE_FORMAT,  # 日志格式化模板，从配置文件中获取
+        "enqueue": True,  # 启用异步写入，避免日志写入阻塞主程序
+        "rotation": "5 MB",  # 当日志文件达到5MB时进行轮转（创建新文件）
+        "retention": "7 days",  # 保留最近7天的日志文件，更早的会被删除
+        "compression": "tar.gz",  # 对旧的日志文件进行压缩，使用tar.gz格式
     }
+
+    # TRACE = 5
+    # DEBUG = 10
+    # INFO = 20
+    # SUCCESS = 25
+    # WARNING = 30
+    # ERROR = 40
+    # CRITICAL = 50
 
     # stdout file
     logger.add(
-        str(log_access_file),
-        level=settings.LOG_ACCESS_FILE_LEVEL,
-        filter=lambda record: record["level"].no <= 25,
-        backtrace=False,
-        diagnose=False,
-        **log_config,
+        sink=str(log_access_file),  # 通过日志输出的目标文件路径
+        level=settings.LOG_ACCESS_FILE_LEVEL,  # 日志级别，从配置文件获取
+        filter=lambda record: record["level"].no <= 25,  # 过滤器：只记录级别小于等于25的日志
+        backtrace=False,  # 不显示异常的回溯跟踪信息
+        diagnose=False,  # 不显示诊断信息（变量值等详细信息）
+        **log_config,  # 使用之前定义的通用日志配置
     )
 
     # stderr file
     logger.add(
-        str(log_error_file),
-        level=settings.LOG_ERROR_FILE_LEVEL,
-        filter=lambda record: record["level"].no >= 30,
-        backtrace=True,
-        diagnose=True,
-        **log_config,
+        str(log_error_file),  # 错误日志输出的目标文件路径
+        level=settings.LOG_ERROR_FILE_LEVEL,  # 错误日志的级别，从配置文件获取
+        filter=lambda record: record["level"].no >= 30,  # 过滤器：只记录级别大于等于30的日志
+        backtrace=True,  # 显示异常的回溯跟踪信息
+        diagnose=True,  # 显示诊断信息（变量值等详细信息）
+        **log_config,  # 使用之前定义的通用日志配置
     )
 
 
