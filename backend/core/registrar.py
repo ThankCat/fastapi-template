@@ -137,13 +137,14 @@ def register_middleware(app: FastAPI):
     )
 
     # Access log
+    # 请求日志中间件，用于记录请求信息，如请求路径、请求方法、请求参数、请求头、响应状态码、响应时间等
     if settings.MIDDLEWARE_ACCESS:
         from backend.middleware.access_middleware import AccessMiddleware
 
         app.add_middleware(AccessMiddleware)
 
     # State
-    # TODO:待学习
+    # 主要讲用户IP信息与请求信息存储到 request.State 中，便于后续使用
     app.add_middleware(StateMiddleware)
 
     # Trace ID (required)
@@ -155,7 +156,6 @@ def register_middleware(app: FastAPI):
     )
 
     # CORS: Always at the end
-    # TODO:需要完善注释
     if settings.MIDDLEWARE_CORS:
         from fastapi.middleware.cors import CORSMiddleware
 

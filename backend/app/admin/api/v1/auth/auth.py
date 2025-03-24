@@ -12,6 +12,7 @@ from backend.app.admin.schema.user import AuthLoginParam
 from backend.app.admin.service.auth_service import auth_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.common.security.jwt import DependsJwtAuth
+from backend.common.exception.errors import MustError
 
 router = APIRouter()
 
@@ -32,6 +33,8 @@ async def user_login(
     request: Request, response: Response, obj: AuthLoginParam, background_tasks: BackgroundTasks
 ) -> ResponseSchemaModel[GetLoginToken]:
     data = await auth_service.login(request=request, response=response, obj=obj, background_tasks=background_tasks)
+    # raise MustError(data=data.model_dump()) # 测试自定义异常
+
     return response_base.success(data=data)
 
 

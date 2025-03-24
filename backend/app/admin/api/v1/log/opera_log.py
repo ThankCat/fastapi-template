@@ -17,8 +17,8 @@ router = APIRouter()
 
 
 @router.get(
-    '',
-    summary='（模糊条件）分页获取操作日志',
+    "",
+    summary="（模糊条件）分页获取操作日志",
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -36,10 +36,10 @@ async def get_pagination_opera_logs(
 
 
 @router.delete(
-    '',
-    summary='（批量）删除操作日志',
+    "",
+    summary="（批量）删除操作日志",
     dependencies=[
-        Depends(RequestPermission('log:opera:del')),
+        Depends(RequestPermission("log:opera:del")),
         DependsRBAC,
     ],
 )
@@ -51,10 +51,10 @@ async def delete_opera_log(pk: Annotated[list[int], Query(...)]) -> ResponseMode
 
 
 @router.delete(
-    '/all',
-    summary='清空操作日志',
+    "/all",
+    summary="清空操作日志",
     dependencies=[
-        Depends(RequestPermission('log:opera:empty')),
+        Depends(RequestPermission("log:opera:empty")),
         DependsRBAC,
     ],
 )

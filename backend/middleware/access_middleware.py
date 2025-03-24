@@ -11,11 +11,11 @@ class AccessMiddleware(BaseHTTPMiddleware):
     """请求日志中间件"""
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        start_time = timezone.now()
-        response = await call_next(request)
-        end_time = timezone.now()
+        start_time = timezone.now()  # 请求开始时间
+        response = await call_next(request)  # 执行后续中间件或路由处理函数
+        end_time = timezone.now()  # 请求结束时间
         log.info(
-            f'{request.client.host: <15} | {request.method: <8} | {response.status_code: <6} | '
-            f'{request.url.path} | {round((end_time - start_time).total_seconds(), 3) * 1000.0}ms'
+            f"{request.client.host: <15} | {request.method: <8} | {response.status_code: <6} | "
+            f"{request.url.path} | {round((end_time - start_time).total_seconds(), 3) * 1000.0}ms"
         )
         return response

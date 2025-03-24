@@ -10,8 +10,8 @@ class StateMiddleware(BaseHTTPMiddleware):
     """请求 state 中间件"""
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        ip_info = await parse_ip_info(request)
-        ua_info = parse_user_agent_info(request)
+        ip_info = await parse_ip_info(request)  # 解析IP信息
+        ua_info = parse_user_agent_info(request)  # 解析用户请求头信息
 
         # 设置附加请求信息
         request.state.ip = ip_info.ip
@@ -23,6 +23,6 @@ class StateMiddleware(BaseHTTPMiddleware):
         request.state.browser = ua_info.browser
         request.state.device = ua_info.device
 
-        response = await call_next(request)
+        response = await call_next(request)  # 执行后续的中间件和路由处理函数
 
         return response

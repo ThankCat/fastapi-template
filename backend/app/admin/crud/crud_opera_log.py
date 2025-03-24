@@ -18,14 +18,26 @@ class CRUDOperaLogDao(CRUDPlus[OperaLog]):
         :param ip:
         :return:
         """
-        filters = {}
+        # filters = {}
+        # if username is not None:
+        #     filters.update(username=f"%{username}%")
+        # if status is not None:
+        #     filters.update(status=status)
+        # if ip is not None:
+        #     filters.update(ip=f"%{ip}%")
+        # return await self.select_order("created_time", "desc", **filters)
+
+        # TODO:这里模糊查询有点问题
+        stmt = await self.select()
         if username is not None:
-            filters.update(username=f'%{username}%')
+            stmt = stmt.where(self.model.username.like(f"%{username}%"))
         if status is not None:
-            filters.update(status=status)
+            stmt = stmt.where(self.model.status == status)
         if ip is not None:
-            filters.update(ip=f'%{ip}%')
-        return await self.select_order('created_time', 'desc', **filters)
+            stmt = stmt.where(self.model.ip.like(f"%{ip}%"))
+
+        print(stmt)
+        return stmt.order_by(self.model.created_time.desc())
 
     async def create(self, db: AsyncSession, obj_in: CreateOperaLogParam) -> None:
         """

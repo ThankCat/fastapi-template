@@ -33,19 +33,20 @@ class JwtAuthMiddleware(AuthenticationBackend):
         return MsgSpecJSONResponse(content={"code": exc.code, "msg": exc.msg, "data": None}, status_code=exc.code)
 
     async def authenticate(self, request: Request) -> tuple[AuthCredentials, CurrentUserIns] | None:
-        token = request.headers.get("Authorization")
+        token = request.headers.get("Authorization")  # 获取请求头中的 Authorization 字段 "Bearer eyJhbGciO..."
         if not token:
             return
 
+        # 排除token白名单中的路径
         if request.url.path in settings.TOKEN_REQUEST_PATH_EXCLUDE:
             return
 
-        scheme, token = get_authorization_scheme_param(token)
+        scheme, token = get_authorization_scheme_param(token)  # 分离出 scheme 和 token 、｜ bearer 和 eyJhbGciO...
         if scheme.lower() != "bearer":
             return
 
         try:
-            user = await jwt_authentication(token)
+            user = await jwt_authentication(token)  # 验证身份，并返回用户
         except TokenError as exc:
             raise _AuthenticationError(code=exc.code, msg=exc.detail, headers=exc.headers)
         except Exception as e:
