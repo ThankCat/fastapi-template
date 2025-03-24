@@ -131,7 +131,9 @@ def register_middleware(app: FastAPI):
 
     # JWT auth (required)
     app.add_middleware(
-        AuthenticationMiddleware, backend=JwtAuthMiddleware(), on_error=JwtAuthMiddleware.auth_exception_handler
+        AuthenticationMiddleware,
+        backend=JwtAuthMiddleware(),
+        on_error=JwtAuthMiddleware.auth_exception_handler,
     )
 
     # Access log
@@ -141,10 +143,16 @@ def register_middleware(app: FastAPI):
         app.add_middleware(AccessMiddleware)
 
     # State
+    # TODO:待学习
     app.add_middleware(StateMiddleware)
 
     # Trace ID (required)
-    app.add_middleware(CorrelationIdMiddleware, validator=False)
+    # 参考 https://github.com/snok/asgi-correlation-id
+    app.add_middleware(
+        CorrelationIdMiddleware,
+        # header_name=settings.TEST_TRACE_ID,
+        validator=False,
+    )
 
     # CORS: Always at the end
     # TODO:需要完善注释
