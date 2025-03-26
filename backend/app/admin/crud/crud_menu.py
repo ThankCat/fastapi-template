@@ -42,10 +42,10 @@ class CRUDMenu(CRUDPlus[Menu]):
         """
         filters = {}
         if title is not None:
-            filters.update(title=f'%{title}%')
+            filters.update(title=f"%{title}%")
         if status is not None:
             filters.update(status=status)
-        return await self.select_models_order(db, 'sort', **filters)
+        return await self.select_models_order(db, "sort", **filters)
 
     async def get_role_menus(self, db, superuser: bool, menu_ids: list[int]) -> Sequence[Menu]:
         """

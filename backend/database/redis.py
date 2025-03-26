@@ -29,13 +29,13 @@ class RedisCli(Redis):
         try:
             await self.ping()
         except TimeoutError:
-            log.error('❌ 数据库 redis 连接超时')
+            log.error("❌ 数据库 redis 连接超时")
             sys.exit()
         except AuthenticationError:
-            log.error('❌ 数据库 redis 连接认证失败')
+            log.error("❌ 数据库 redis 连接认证失败")
             sys.exit()
         except Exception as e:
-            log.error('❌ 数据库 redis 连接异常 {}', e)
+            log.error("❌ 数据库 redis 连接异常 {}", e)
             sys.exit()
 
     async def delete_prefix(self, prefix: str, exclude: str | list = None):
@@ -47,7 +47,7 @@ class RedisCli(Redis):
         :return:
         """
         keys = []
-        async for key in self.scan_iter(match=f'{prefix}*'):
+        async for key in self.scan_iter(match=f"{prefix}*"):
             if isinstance(exclude, str):
                 if key != exclude:
                     keys.append(key)

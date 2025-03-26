@@ -16,15 +16,15 @@ from backend.plugin.notice.service.notice_service import notice_service
 router = APIRouter()
 
 
-@router.get('/{pk}', summary='获取通知公告详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取通知公告详情", dependencies=[DependsJwtAuth])
 async def get_notice(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetNoticeDetail]:
     notice = await notice_service.get(pk=pk)
     return response_base.success(data=notice)
 
 
 @router.get(
-    '',
-    summary='（模糊条件）分页获取所有通知公告',
+    "",
+    summary="（模糊条件）分页获取所有通知公告",
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -37,10 +37,10 @@ async def get_pagination_notice(db: CurrentSession) -> ResponseSchemaModel[PageD
 
 
 @router.post(
-    '',
-    summary='创建通知公告',
+    "",
+    summary="创建通知公告",
     dependencies=[
-        Depends(RequestPermission('sys:notice:add')),
+        Depends(RequestPermission("sys:notice:add")),
         DependsRBAC,
     ],
 )
@@ -50,10 +50,10 @@ async def create_notice(obj: CreateNoticeParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新通知公告',
+    "/{pk}",
+    summary="更新通知公告",
     dependencies=[
-        Depends(RequestPermission('sys:notice:edit')),
+        Depends(RequestPermission("sys:notice:edit")),
         DependsRBAC,
     ],
 )
@@ -65,10 +65,10 @@ async def update_notice(pk: Annotated[int, Path(...)], obj: UpdateNoticeParam) -
 
 
 @router.delete(
-    '',
-    summary='（批量）删除通知公告',
+    "",
+    summary="（批量）删除通知公告",
     dependencies=[
-        Depends(RequestPermission('sys:notice:del')),
+        Depends(RequestPermission("sys:notice:del")),
         DependsRBAC,
     ],
 )

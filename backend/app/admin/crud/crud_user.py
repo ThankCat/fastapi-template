@@ -59,7 +59,7 @@ class CRUDUser(CRUDPlus[User]):
         :param username:
         :return:
         """
-        return await self.update_model_by_column(db, {'last_login_time': timezone.now()}, username=username)
+        return await self.update_model_by_column(db, {"last_login_time": timezone.now()}, username=username)
 
     async def create(self, db: AsyncSession, obj: RegisterUserParam, *, social: bool = False) -> None:
         """
@@ -74,10 +74,10 @@ class CRUDUser(CRUDPlus[User]):
             salt = bcrypt.gensalt()
             obj.password = get_hash_password(obj.password, salt)
             dict_obj = obj.model_dump()
-            dict_obj.update({'is_staff': True, 'salt': salt})
+            dict_obj.update({"is_staff": True, "salt": salt})
         else:
             dict_obj = obj.model_dump()
-            dict_obj.update({'is_staff': True, 'salt': None})
+            dict_obj.update({"is_staff": True, "salt": None})
         new_user = self.model(**dict_obj)
         db.add(new_user)
 
@@ -91,8 +91,8 @@ class CRUDUser(CRUDPlus[User]):
         """
         salt = bcrypt.gensalt()
         obj.password = get_hash_password(obj.password, salt)
-        dict_obj = obj.model_dump(exclude={'roles'})
-        dict_obj.update({'salt': salt})
+        dict_obj = obj.model_dump(exclude={"roles"})
+        dict_obj.update({"salt": salt})
         new_user = self.model(**dict_obj)
         role_list = []
         for role_id in obj.roles:
@@ -139,7 +139,7 @@ class CRUDUser(CRUDPlus[User]):
         :param avatar:
         :return:
         """
-        return await self.update_model(db, input_user, {'avatar': avatar.url})
+        return await self.update_model(db, input_user, {"avatar": avatar.url})
 
     async def delete(self, db: AsyncSession, user_id: int) -> int:
         """
@@ -170,7 +170,7 @@ class CRUDUser(CRUDPlus[User]):
         :param new_pwd:
         :return:
         """
-        return await self.update_model(db, pk, {'password': new_pwd})
+        return await self.update_model(db, pk, {"password": new_pwd})
 
     async def get_list(self, dept: int = None, username: str = None, phone: str = None, status: int = None) -> Select:
         """
@@ -195,9 +195,9 @@ class CRUDUser(CRUDPlus[User]):
         if dept:
             where_list.append(self.model.dept_id == dept)
         if username:
-            where_list.append(self.model.username.like(f'%{username}%'))
+            where_list.append(self.model.username.like(f"%{username}%"))
         if phone:
-            where_list.append(self.model.phone.like(f'%{phone}%'))
+            where_list.append(self.model.phone.like(f"%{phone}%"))
         if status is not None:
             where_list.append(self.model.status == status)
         if where_list:
@@ -257,7 +257,7 @@ class CRUDUser(CRUDPlus[User]):
         :param _super:
         :return:
         """
-        return await self.update_model(db, user_id, {'is_superuser': _super})
+        return await self.update_model(db, user_id, {"is_superuser": _super})
 
     async def set_staff(self, db: AsyncSession, user_id: int, staff: bool) -> int:
         """
@@ -268,7 +268,7 @@ class CRUDUser(CRUDPlus[User]):
         :param staff:
         :return:
         """
-        return await self.update_model(db, user_id, {'is_staff': staff})
+        return await self.update_model(db, user_id, {"is_staff": staff})
 
     async def set_status(self, db: AsyncSession, user_id: int, status: bool) -> int:
         """
@@ -279,7 +279,7 @@ class CRUDUser(CRUDPlus[User]):
         :param status:
         :return:
         """
-        return await self.update_model(db, user_id, {'status': status})
+        return await self.update_model(db, user_id, {"status": status})
 
     async def set_multi_login(self, db: AsyncSession, user_id: int, multi_login: bool) -> int:
         """
@@ -290,7 +290,7 @@ class CRUDUser(CRUDPlus[User]):
         :param multi_login:
         :return:
         """
-        return await self.update_model(db, user_id, {'is_multi_login': multi_login})
+        return await self.update_model(db, user_id, {"is_multi_login": multi_login})
 
     async def get_with_relation(self, db: AsyncSession, *, user_id: int = None, username: str = None) -> User | None:
         """

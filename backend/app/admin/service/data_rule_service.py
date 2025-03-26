@@ -22,7 +22,7 @@ class DataRuleService:
         async with async_db_session() as db:
             data_rule = await data_rule_dao.get(db, pk)
             if not data_rule:
-                raise errors.NotFoundError(msg='数据规则不存在')
+                raise errors.NotFoundError(msg="数据规则不存在")
             return data_rule
 
     @staticmethod
@@ -30,7 +30,7 @@ class DataRuleService:
         async with async_db_session() as db:
             role = await role_dao.get_with_relation(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             rule_ids = [rule.id for rule in role.rules]
             return rule_ids
 
@@ -41,7 +41,7 @@ class DataRuleService:
     @staticmethod
     async def get_columns(model: str) -> list[str]:
         if model not in settings.DATA_PERMISSION_MODELS:
-            raise errors.NotFoundError(msg='数据模型不存在')
+            raise errors.NotFoundError(msg="数据模型不存在")
         model_ins = dynamic_import_data_model(settings.DATA_PERMISSION_MODELS[model])
         model_columns = [
             key for key in model_ins.__table__.columns.keys() if key not in settings.DATA_PERMISSION_COLUMN_EXCLUDE
@@ -63,7 +63,7 @@ class DataRuleService:
         async with async_db_session.begin() as db:
             data_rule = await data_rule_dao.get_by_name(db, obj.name)
             if data_rule:
-                raise errors.ForbiddenError(msg='数据权限规则已存在')
+                raise errors.ForbiddenError(msg="数据权限规则已存在")
             await data_rule_dao.create(db, obj)
 
     @staticmethod
@@ -71,7 +71,7 @@ class DataRuleService:
         async with async_db_session.begin() as db:
             data_rule = await data_rule_dao.get(db, pk)
             if not data_rule:
-                raise errors.NotFoundError(msg='数据权限规则不存在')
+                raise errors.NotFoundError(msg="数据权限规则不存在")
             count = await data_rule_dao.update(db, pk, obj)
             return count
 
@@ -79,7 +79,7 @@ class DataRuleService:
     async def delete(*, request: Request, pk: list[int]) -> int:
         async with async_db_session.begin() as db:
             count = await data_rule_dao.delete(db, pk)
-            await redis_client.delete(f'{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}')
+            await redis_client.delete(f"{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}")
             return count
 
 

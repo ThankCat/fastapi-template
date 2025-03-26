@@ -32,9 +32,9 @@ class CRUDDictData(CRUDPlus[DictData]):
         stmt = select(self.model).options(noload(self.model.type)).order_by(desc(self.model.sort))
         where_list = []
         if label is not None:
-            where_list.append(self.model.label.like(f'%{label}%'))
+            where_list.append(self.model.label.like(f"%{label}%"))
         if value is not None:
-            where_list.append(self.model.value.like(f'%{value}%'))
+            where_list.append(self.model.value.like(f"%{value}%"))
         if status is not None:
             where_list.append(self.model.status == status)
         if where_list:

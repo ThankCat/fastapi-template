@@ -9,10 +9,10 @@ class GeneratorSettings(BaseSettings):
     """Admin Settings"""
 
     # 模版目录
-    TEMPLATE_BACKEND_DIR_NAME: str = 'py'
+    TEMPLATE_BACKEND_DIR_NAME: str = "py"
 
     # 代码下载
-    DOWNLOAD_ZIP_FILENAME: str = 'fba_generator'
+    DOWNLOAD_ZIP_FILENAME: str = "fba_generator"
 
 
 @lru_cache

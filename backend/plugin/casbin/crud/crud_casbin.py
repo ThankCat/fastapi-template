@@ -19,7 +19,7 @@ class CRUDCasbin(CRUDPlus[CasbinRule]):
         :param sub:
         :return:
         """
-        return await self.select_order('id', 'desc', ptype=ptype, v0__like=f'%{sub}%')
+        return await self.select_order("id", "desc", ptype=ptype, v0__like=f"%{sub}%")
 
     async def delete_policies_by_sub(self, db: AsyncSession, sub: DeleteAllPoliciesParam) -> int:
         """
@@ -32,7 +32,7 @@ class CRUDCasbin(CRUDPlus[CasbinRule]):
         where_list = [sub.role]
         if sub.uuid:
             where_list.append(sub.uuid)
-        return await self.delete_model_by_column(db, allow_multiple=True, v0__mor={'eq': where_list})
+        return await self.delete_model_by_column(db, allow_multiple=True, v0__mor={"eq": where_list})
 
     async def delete_groups_by_uuid(self, db: AsyncSession, uuid: UUID) -> int:
         """

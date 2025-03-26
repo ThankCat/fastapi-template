@@ -17,8 +17,8 @@ router = APIRouter()
 
 
 @router.get(
-    '',
-    summary='（模糊条件）分页获取所有字典类型',
+    "",
+    summary="（模糊条件）分页获取所有字典类型",
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -36,10 +36,10 @@ async def get_pagination_dict_types(
 
 
 @router.post(
-    '',
-    summary='创建字典类型',
+    "",
+    summary="创建字典类型",
     dependencies=[
-        Depends(RequestPermission('sys:dict:type:add')),
+        Depends(RequestPermission("sys:dict:type:add")),
         DependsRBAC,
     ],
 )
@@ -49,10 +49,10 @@ async def create_dict_type(obj: CreateDictTypeParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新字典类型',
+    "/{pk}",
+    summary="更新字典类型",
     dependencies=[
-        Depends(RequestPermission('sys:dict:type:edit')),
+        Depends(RequestPermission("sys:dict:type:edit")),
         DependsRBAC,
     ],
 )
@@ -64,10 +64,10 @@ async def update_dict_type(pk: Annotated[int, Path(...)], obj: UpdateDictTypePar
 
 
 @router.delete(
-    '',
-    summary='（批量）删除字典类型',
+    "",
+    summary="（批量）删除字典类型",
     dependencies=[
-        Depends(RequestPermission('sys:dict:type:del')),
+        Depends(RequestPermission("sys:dict:type:del")),
         DependsRBAC,
     ],
 )

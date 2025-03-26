@@ -20,12 +20,12 @@ class CRUDLoginLog(CRUDPlus[LoginLog]):
         """
         filters = {}
         if username is not None:
-            filters.update(username__like=f'%{username}%')
+            filters.update(username__like=f"%{username}%")
         if status is not None:
             filters.update(status=status)
         if ip is not None:
-            filters.update(ip__like=f'%{ip}%')
-        return await self.select_order('created_time', 'desc', **filters)
+            filters.update(ip__like=f"%{ip}%")
+        return await self.select_order("created_time", "desc", **filters)
 
     async def create(self, db: AsyncSession, obj_in: CreateLoginLogParam) -> None:
         """

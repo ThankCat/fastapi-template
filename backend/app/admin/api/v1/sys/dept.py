@@ -14,13 +14,13 @@ from backend.common.security.rbac import DependsRBAC
 router = APIRouter()
 
 
-@router.get('/{pk}', summary='获取部门详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取部门详情", dependencies=[DependsJwtAuth])
 async def get_dept(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetDeptDetail]:
     data = await dept_service.get(pk=pk)
     return response_base.success(data=data)
 
 
-@router.get('', summary='获取所有部门展示树', dependencies=[DependsJwtAuth])
+@router.get("", summary="获取所有部门展示树", dependencies=[DependsJwtAuth])
 async def get_all_depts_tree(
     name: Annotated[str | None, Query()] = None,
     leader: Annotated[str | None, Query()] = None,
@@ -32,10 +32,10 @@ async def get_all_depts_tree(
 
 
 @router.post(
-    '',
-    summary='创建部门',
+    "",
+    summary="创建部门",
     dependencies=[
-        Depends(RequestPermission('sys:dept:add')),
+        Depends(RequestPermission("sys:dept:add")),
         DependsRBAC,
     ],
 )
@@ -45,10 +45,10 @@ async def create_dept(obj: CreateDeptParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新部门',
+    "/{pk}",
+    summary="更新部门",
     dependencies=[
-        Depends(RequestPermission('sys:dept:edit')),
+        Depends(RequestPermission("sys:dept:edit")),
         DependsRBAC,
     ],
 )
@@ -60,10 +60,10 @@ async def update_dept(pk: Annotated[int, Path(...)], obj: UpdateDeptParam) -> Re
 
 
 @router.delete(
-    '/{pk}',
-    summary='删除部门',
+    "/{pk}",
+    summary="删除部门",
     dependencies=[
-        Depends(RequestPermission('sys:dept:del')),
+        Depends(RequestPermission("sys:dept:del")),
         DependsRBAC,
     ],
 )

@@ -45,16 +45,16 @@ class CRUDDept(CRUDPlus[Dept]):
         :param status:
         :return:
         """
-        filters = {'del_flag__eq': 0}
+        filters = {"del_flag__eq": 0}
         if name is not None:
-            filters.update(name__like=f'%{name}%')
+            filters.update(name__like=f"%{name}%")
         if leader is not None:
-            filters.update(leader__like=f'%{leader}%')
+            filters.update(leader__like=f"%{leader}%")
         if phone is not None:
             filters.update(phone__startswith=phone)
         if status is not None:
             filters.update(status=status)
-        return await self.select_models_order(db, sort_columns='sort', **filters)
+        return await self.select_models_order(db, sort_columns="sort", **filters)
 
     async def create(self, db: AsyncSession, obj_in: CreateDeptParam) -> None:
         """
@@ -85,7 +85,7 @@ class CRUDDept(CRUDPlus[Dept]):
         :param dept_id:
         :return:
         """
-        return await self.delete_model_by_column(db, id=dept_id, logical_deletion=True, deleted_flag_column='del_flag')
+        return await self.delete_model_by_column(db, id=dept_id, logical_deletion=True, deleted_flag_column="del_flag")
 
     async def get_with_relation(self, db: AsyncSession, dept_id: int) -> list[User]:
         """

@@ -15,13 +15,13 @@ class GenTemplate:
     def __init__(self):
         self.env = Environment(
             loader=FileSystemLoader(JINJA2_TEMPLATE_DIR),
-            autoescape=select_autoescape(enabled_extensions=['jinja']),
+            autoescape=select_autoescape(enabled_extensions=["jinja"]),
             trim_blocks=True,
             lstrip_blocks=True,
             keep_trailing_newline=True,
             enable_async=True,
         )
-        self.init_content = '#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n'
+        self.init_content = "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n"
 
     def get_template(self, jinja_file: str) -> Template:
         """
@@ -41,11 +41,11 @@ class GenTemplate:
         :return:
         """
         return [
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/api.jinja',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/crud.jinja',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/model.jinja',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/schema.jinja',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/service.jinja',
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/api.jinja",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/crud.jinja",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/model.jinja",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/schema.jinja",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/service.jinja",
         ]
 
     @staticmethod
@@ -59,11 +59,11 @@ class GenTemplate:
         app_name = business.app_name
         module_name = business.table_name_en
         target_files = [
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/api/{business.api_version}/{module_name}.py',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/crud/crud_{module_name}.py',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/model/{module_name}.py',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/schema/{module_name}.py',
-            f'{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/service/{module_name}_service.py',
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/api/{business.api_version}/{module_name}.py",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/crud/crud_{module_name}.py",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/model/{module_name}.py",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/schema/{module_name}.py",
+            f"{generator_settings.TEMPLATE_BACKEND_DIR_NAME}/{app_name}/service/{module_name}_service.py",
         ]
         return target_files
 
@@ -89,17 +89,17 @@ class GenTemplate:
         :return:
         """
         return {
-            'app_name': business.app_name,
-            'table_name_en': to_snake(business.table_name_en),
-            'table_name_class': to_pascal(business.table_name_en),
-            'table_name_zh': business.table_name_zh,
-            'table_simple_name_zh': business.table_simple_name_zh,
-            'table_comment': business.table_comment,
-            'schema_name': to_pascal(business.schema_name),
-            'default_datetime_column': business.default_datetime_column,
-            'permission': str(business.table_name_en.replace('_', ':')),
-            'database_type': settings.DATABASE_TYPE,
-            'models': models,
+            "app_name": business.app_name,
+            "table_name_en": to_snake(business.table_name_en),
+            "table_name_class": to_pascal(business.table_name_en),
+            "table_name_zh": business.table_name_zh,
+            "table_simple_name_zh": business.table_simple_name_zh,
+            "table_comment": business.table_comment,
+            "schema_name": to_pascal(business.schema_name),
+            "default_datetime_column": business.default_datetime_column,
+            "permission": str(business.table_name_en.replace("_", ":")),
+            "database_type": settings.DATABASE_TYPE,
+            "models": models,
         }
 
 

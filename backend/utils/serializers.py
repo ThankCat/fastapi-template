@@ -11,7 +11,7 @@ from starlette.responses import JSONResponse
 
 RowData = Row | RowMapping | Any
 
-R = TypeVar('R', bound=RowData)
+R = TypeVar("R", bound=RowData)
 
 
 def select_columns_serialize(row: R) -> dict:
@@ -55,8 +55,8 @@ def select_as_dict(row: R, use_alias: bool = False) -> dict:
     """
     if not use_alias:
         result = row.__dict__
-        if '_sa_instance_state' in result:
-            del result['_sa_instance_state']
+        if "_sa_instance_state" in result:
+            del result["_sa_instance_state"]
     else:
         result = {}
         mapper = class_mapper(row.__class__)  # type: ignore

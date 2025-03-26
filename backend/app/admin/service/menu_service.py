@@ -21,7 +21,7 @@ class MenuService:
         async with async_db_session() as db:
             menu = await menu_dao.get(db, menu_id=pk)
             if not menu:
-                raise errors.NotFoundError(msg='菜单不存在')
+                raise errors.NotFoundError(msg="菜单不存在")
             return menu
 
     @staticmethod
@@ -36,7 +36,7 @@ class MenuService:
         async with async_db_session() as db:
             role = await role_dao.get_with_relation(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             menu_ids = [menu.id for menu in role.menus]
             menu_select = await menu_dao.get_role_menus(db, False, menu_ids)
             menu_tree = get_tree_data(menu_select)
@@ -60,11 +60,11 @@ class MenuService:
         async with async_db_session.begin() as db:
             title = await menu_dao.get_by_title(db, obj.title)
             if title:
-                raise errors.ForbiddenError(msg='菜单标题已存在')
+                raise errors.ForbiddenError(msg="菜单标题已存在")
             if obj.parent_id:
                 parent_menu = await menu_dao.get(db, obj.parent_id)
                 if not parent_menu:
-                    raise errors.NotFoundError(msg='父级菜单不存在')
+                    raise errors.NotFoundError(msg="父级菜单不存在")
             await menu_dao.create(db, obj)
 
     @staticmethod
@@ -72,16 +72,16 @@ class MenuService:
         async with async_db_session.begin() as db:
             menu = await menu_dao.get(db, pk)
             if not menu:
-                raise errors.NotFoundError(msg='菜单不存在')
+                raise errors.NotFoundError(msg="菜单不存在")
             if menu.title != obj.title:
                 if await menu_dao.get_by_title(db, obj.title):
-                    raise errors.ForbiddenError(msg='菜单标题已存在')
+                    raise errors.ForbiddenError(msg="菜单标题已存在")
             if obj.parent_id:
                 parent_menu = await menu_dao.get(db, obj.parent_id)
                 if not parent_menu:
-                    raise errors.NotFoundError(msg='父级菜单不存在')
+                    raise errors.NotFoundError(msg="父级菜单不存在")
             if obj.parent_id == menu.id:
-                raise errors.ForbiddenError(msg='禁止关联自身为父级')
+                raise errors.ForbiddenError(msg="禁止关联自身为父级")
             count = await menu_dao.update(db, pk, obj)
             return count
 
@@ -90,9 +90,9 @@ class MenuService:
         async with async_db_session.begin() as db:
             children = await menu_dao.get_children(db, pk)
             if children:
-                raise errors.ForbiddenError(msg='菜单下存在子菜单，无法删除')
+                raise errors.ForbiddenError(msg="菜单下存在子菜单，无法删除")
             count = await menu_dao.delete(db, pk)
-            await redis_client.delete(f'{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}')
+            await redis_client.delete(f"{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}")
             return count
 
 

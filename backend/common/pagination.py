@@ -16,13 +16,13 @@ if TYPE_CHECKING:
     from sqlalchemy import Select
     from sqlalchemy.ext.asyncio import AsyncSession
 
-T = TypeVar('T')
-SchemaT = TypeVar('SchemaT')
+T = TypeVar("T")
+SchemaT = TypeVar("SchemaT")
 
 
 class _CustomPageParams(BaseModel, AbstractParams):
-    page: int = Query(1, ge=1, description='Page number')
-    size: int = Query(20, gt=0, le=100, description='Page size')  # 默认 20 条记录
+    page: int = Query(1, ge=1, description="Page number")
+    size: int = Query(20, gt=0, le=100, description="Page size")  # 默认 20 条记录
 
     def to_raw_params(self) -> RawParams:
         return RawParams(
@@ -32,19 +32,19 @@ class _CustomPageParams(BaseModel, AbstractParams):
 
 
 class _Links(BaseModel):
-    first: str = Field(..., description='首页链接')
-    last: str = Field(..., description='尾页链接')
-    self: str = Field(..., description='当前页链接')
-    next: str | None = Field(None, description='下一页链接')
-    prev: str | None = Field(None, description='上一页链接')
+    first: str = Field(..., description="首页链接")
+    last: str = Field(..., description="尾页链接")
+    self: str = Field(..., description="当前页链接")
+    next: str | None = Field(None, description="下一页链接")
+    prev: str | None = Field(None, description="上一页链接")
 
 
 class _PageDetails(BaseModel):
-    items: list = Field([], description='当前页数据')
-    total: int = Field(..., description='总条数')
-    page: int = Field(..., description='当前页')
-    size: int = Field(..., description='每页数量')
-    total_pages: int = Field(..., description='总页数')
+    items: list = Field([], description="当前页数据")
+    total: int = Field(..., description="总条数")
+    page: int = Field(..., description="当前页")
+    size: int = Field(..., description="每页数量")
+    total_pages: int = Field(..., description="总页数")
     links: _Links
 
 
@@ -62,10 +62,10 @@ class _CustomPage(_PageDetails, AbstractPage[T], Generic[T]):
         size = params.size
         total_pages = ceil(total / params.size)
         links = create_links(
-            first={'page': 1, 'size': size},
-            last={'page': f'{ceil(total / params.size)}', 'size': size} if total > 0 else {'page': 1, 'size': size},
-            next={'page': f'{page + 1}', 'size': size} if (page + 1) <= total_pages else None,
-            prev={'page': f'{page - 1}', 'size': size} if (page - 1) >= 1 else None,
+            first={"page": 1, "size": size},
+            last={"page": f"{ceil(total / params.size)}", "size": size} if total > 0 else {"page": 1, "size": size},
+            next={"page": f"{page + 1}", "size": size} if (page + 1) <= total_pages else None,
+            prev={"page": f"{page - 1}", "size": size} if (page - 1) >= 1 else None,
         ).model_dump()
 
         return cls(
@@ -84,17 +84,17 @@ class PageData(_PageDetails, Generic[SchemaT]):
 
     E.g. ::
 
-        @router.get('/test', response_model=ResponseSchemaModel[PageData[GetApiDetail]])
+        @router.get("/test", response_model=ResponseSchemaModel[PageData[GetApiDetail]])
         def test():
             return ResponseSchemaModel[PageData[GetApiDetail]](data=GetApiDetail(...))
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseSchemaModel[PageData[GetApiDetail]]:
             return ResponseSchemaModel[PageData[GetApiDetail]](data=GetApiDetail(...))
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseSchemaModel[PageData[GetApiDetail]]:
             res = CustomResponseCode.HTTP_200
             return ResponseSchemaModel[PageData[GetApiDetail]](code=res.code, msg=res.msg, data=GetApiDetail(...))

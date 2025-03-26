@@ -17,8 +17,8 @@ router = APIRouter()
 
 
 @router.get(
-    '',
-    summary='（模糊条件）分页获取登录日志',
+    "",
+    summary="（模糊条件）分页获取登录日志",
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -36,10 +36,10 @@ async def get_pagination_login_logs(
 
 
 @router.delete(
-    '',
-    summary='（批量）删除登录日志',
+    "",
+    summary="（批量）删除登录日志",
     dependencies=[
-        Depends(RequestPermission('log:login:del')),
+        Depends(RequestPermission("log:login:del")),
         DependsRBAC,
     ],
 )
@@ -51,10 +51,10 @@ async def delete_login_log(pk: Annotated[list[int], Query(...)]) -> ResponseMode
 
 
 @router.delete(
-    '/all',
-    summary='清空登录日志',
+    "/all",
+    summary="清空登录日志",
     dependencies=[
-        Depends(RequestPermission('log:login:empty')),
+        Depends(RequestPermission("log:login:empty")),
         DependsRBAC,
     ],
 )

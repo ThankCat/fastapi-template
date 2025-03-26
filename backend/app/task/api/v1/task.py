@@ -14,42 +14,42 @@ from backend.common.security.rbac import DependsRBAC
 router = APIRouter()
 
 
-@router.get('', summary='获取可执行任务', dependencies=[DependsJwtAuth])
+@router.get("", summary="获取可执行任务", dependencies=[DependsJwtAuth])
 async def get_all_tasks() -> ResponseSchemaModel[list[str]]:
     tasks = await task_service.get_list()
     return response_base.success(data=tasks)
 
 
 @router.get(
-    '/{tid}',
-    summary='获取任务详情',
+    "/{tid}",
+    summary="获取任务详情",
     deprecated=True,
-    description='此接口被视为作废，建议使用 flower 查看任务详情',
+    description="此接口被视为作废，建议使用 flower 查看任务详情",
     dependencies=[DependsJwtAuth],
 )
-async def get_task_detail(tid: Annotated[str, Path(description='任务ID')]) -> ResponseSchemaModel[TaskResult]:
+async def get_task_detail(tid: Annotated[str, Path(description="任务ID")]) -> ResponseSchemaModel[TaskResult]:
     status = task_service.get_detail(tid=tid)
     return response_base.success(data=status)
 
 
 @router.post(
-    '/{tid}',
-    summary='撤销任务',
+    "/{tid}",
+    summary="撤销任务",
     dependencies=[
-        Depends(RequestPermission('sys:task:revoke')),
+        Depends(RequestPermission("sys:task:revoke")),
         DependsRBAC,
     ],
 )
-async def revoke_task(tid: Annotated[str, Path(description='任务ID')]) -> ResponseModel:
+async def revoke_task(tid: Annotated[str, Path(description="任务ID")]) -> ResponseModel:
     task_service.revoke(tid=tid)
     return response_base.success()
 
 
 @router.post(
-    '',
-    summary='执行任务',
+    "",
+    summary="执行任务",
     dependencies=[
-        Depends(RequestPermission('sys:task:run')),
+        Depends(RequestPermission("sys:task:run")),
         DependsRBAC,
     ],
 )

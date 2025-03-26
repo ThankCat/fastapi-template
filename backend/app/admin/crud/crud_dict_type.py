@@ -30,12 +30,12 @@ class CRUDDictType(CRUDPlus[DictType]):
         """
         filters = {}
         if name is not None:
-            filters.update(name__like=f'%{name}%')
+            filters.update(name__like=f"%{name}%")
         if code is not None:
-            filters.update(code__like=f'%{code}%')
+            filters.update(code__like=f"%{code}%")
         if status is not None:
             filters.update(status=status)
-        return await self.select_order('created_time', 'desc', **filters)
+        return await self.select_order("created_time", "desc", **filters)
 
     async def get_by_code(self, db: AsyncSession, code: str) -> DictType | None:
         """

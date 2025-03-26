@@ -12,9 +12,7 @@ from backend.core.path_conf import BasePath
 class Settings(BaseSettings):
     """Global Settings"""
 
-    model_config = SettingsConfigDict(
-        env_file=f"{BasePath}/.env", env_file_encoding="utf-8", extra="ignore"
-    )
+    model_config = SettingsConfigDict(env_file=f"{BasePath}/.env", env_file_encoding="utf-8", extra="ignore")
 
     # Env Config
     ENVIRONMENT: Literal["dev", "pro"]
@@ -38,9 +36,7 @@ class Settings(BaseSettings):
     TOKEN_SECRET_KEY: str  # 密钥 secrets.token_urlsafe(32)
 
     # Env Opera Log
-    OPERA_LOG_ENCRYPT_SECRET_KEY: (
-        str  # 密钥 os.urandom(32), 需使用 bytes.hex() 方法转换为 str
-    )
+    OPERA_LOG_ENCRYPT_SECRET_KEY: str  # 密钥 os.urandom(32), 需使用 bytes.hex() 方法转换为 str
 
     # FastAPI
     FASTAPI_API_V1_PATH: str = "/api/v1"
@@ -74,9 +70,7 @@ class Settings(BaseSettings):
     # Token
     TOKEN_ALGORITHM: str = "HS256"  # 算法
     TOKEN_EXPIRE_SECONDS: int = 60 * 60 * 24 * 1  # 过期时间，单位：秒
-    TOKEN_REFRESH_EXPIRE_SECONDS: int = (
-        60 * 60 * 24 * 7
-    )  # refresh token 过期时间，单位：秒
+    TOKEN_REFRESH_EXPIRE_SECONDS: int = 60 * 60 * 24 * 7  # refresh token 过期时间，单位：秒
     TOKEN_REDIS_PREFIX: str = "fba:token"
     TOKEN_EXTRA_INFO_REDIS_PREFIX: str = "fba:token_extra_info"
     TOKEN_ONLINE_REDIS_PREFIX: str = "fba:token_online"
@@ -168,9 +162,7 @@ class Settings(BaseSettings):
         f"{FASTAPI_API_V1_PATH}/oauth2/github/callback",
         f"{FASTAPI_API_V1_PATH}/oauth2/linux-do/callback",
     ]
-    OPERA_LOG_ENCRYPT_TYPE: int = (
-        1  # 0: AES (性能损耗); 1: md5; 2: ItsDangerous; 3: 不加密, others: 替换为 ******
-    )
+    OPERA_LOG_ENCRYPT_TYPE: int = 1  # 0: AES (性能损耗); 1: md5; 2: ItsDangerous; 3: 不加密, others: 替换为 ******
     OPERA_LOG_ENCRYPT_KEY_INCLUDE: list[str] = [  # 将加密接口入参参数对应的值
         "password",
         "old_password",
@@ -179,11 +171,11 @@ class Settings(BaseSettings):
     ]
 
     # Data permission
-    DATA_PERMISSION_MODELS: dict[str, str] = (
-        {  # 允许进行数据过滤的 SQLA 模型，它必须以模块字符串的方式定义（它应该只用于前台数据，这里只是为了演示）
-            "Api": "backend.plugin.casbin.model.Api",
-        }
-    )
+    DATA_PERMISSION_MODELS: dict[
+        str, str
+    ] = {  # 允许进行数据过滤的 SQLA 模型，它必须以模块字符串的方式定义（它应该只用于前台数据，这里只是为了演示）
+        "Api": "backend.plugin.casbin.model.Api",
+    }
     DATA_PERMISSION_COLUMN_EXCLUDE: list[str] = [  # 排除允许进行数据过滤的 SQLA 模型列
         "id",
         "sort",

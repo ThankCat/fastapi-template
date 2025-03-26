@@ -15,10 +15,10 @@ class TaskBase(Task):
     max_retries = task_settings.CELERY_TASK_MAX_RETRIES
 
     async def before_start(self, task_id, args, kwargs):
-        await task_notification(msg=f'任务 {task_id} 开始执行')
+        await task_notification(msg=f"任务 {task_id} 开始执行")
 
     async def on_success(self, retval, task_id, args, kwargs):
-        await task_notification(msg=f'任务 {task_id} 执行成功')
+        await task_notification(msg=f"任务 {task_id} 执行成功")
 
     async def on_failure(self, exc, task_id, args, kwargs, einfo):
-        await task_notification(msg=f'任务 {task_id} 执行失败')
+        await task_notification(msg=f"任务 {task_id} 执行失败")

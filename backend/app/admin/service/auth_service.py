@@ -34,11 +34,11 @@ class AuthService:
     async def user_verify(db: AsyncSession, username: str, password: str) -> User:
         user = await user_dao.get_by_username(db, username)
         if not user:
-            raise errors.NotFoundError(msg='用户名或密码有误')
+            raise errors.NotFoundError(msg="用户名或密码有误")
         elif not password_verify(password, user.password):
-            raise errors.AuthorizationError(msg='用户名或密码有误')
+            raise errors.AuthorizationError(msg="用户名或密码有误")
         elif not user.status:
-            raise errors.AuthorizationError(msg='用户已被锁定, 请联系统管理员')
+            raise errors.AuthorizationError(msg="用户已被锁定, 请联系统管理员")
         return user
 
     async def swagger_login(self, *, obj: HTTPBasicCredentials) -> tuple[str, User]:
@@ -49,7 +49,7 @@ class AuthService:
                 str(user.id),
                 user.is_multi_login,
                 # extra info
-                login_type='swagger',
+                login_type="swagger",
             )
             return a_token.access_token, user
 
@@ -60,12 +60,12 @@ class AuthService:
             user = None
             try:
                 user = await self.user_verify(db, obj.username, obj.password)
-                captcha_code = await redis_client.get(f'{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}')
+                captcha_code = await redis_client.get(f"{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}")
                 if not captcha_code:
-                    raise errors.AuthorizationError(msg='验证码失效，请重新获取')
+                    raise errors.AuthorizationError(msg="验证码失效，请重新获取")
                 if captcha_code.lower() != obj.captcha.lower():
                     raise errors.CustomError(error=CustomErrorCode.CAPTCHA_ERROR)
-                await redis_client.delete(f'{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}')
+                await redis_client.delete(f"{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}")
                 await user_dao.update_login_time(db, obj.username)
                 await db.refresh(user)
                 a_token = await create_access_token(
@@ -89,11 +89,11 @@ class AuthService:
                     httponly=True,
                 )
             except errors.NotFoundError as e:
-                log.error('登陆错误: 用户名不存在')
+                log.error("登陆错误: 用户名不存在")
                 raise errors.NotFoundError(msg=e.msg)
             except (errors.AuthorizationError, errors.CustomError) as e:
                 if not user:
-                    log.error('登陆错误: 用户密码有误')
+                    log.error("登陆错误: 用户密码有误")
                 task = BackgroundTask(
                     login_log_service.create,
                     **dict(
@@ -108,7 +108,7 @@ class AuthService:
                 )
                 raise errors.AuthorizationError(msg=e.msg, background=task)
             except Exception as e:
-                log.error(f'登陆错误: {e}')
+                log.error(f"登陆错误: {e}")
                 raise e
             else:
                 background_tasks.add_task(
@@ -120,7 +120,7 @@ class AuthService:
                         username=obj.username,
                         login_time=timezone.now(),
                         status=LoginLogStatusType.success.value,
-                        msg='登录成功',
+                        msg="登录成功",
                     ),
                 )
                 data = GetLoginToken(
@@ -135,17 +135,17 @@ class AuthService:
     async def new_token(*, request: Request) -> GetNewToken:
         refresh_token = request.cookies.get(settings.COOKIE_REFRESH_TOKEN_KEY)
         if not refresh_token:
-            raise errors.TokenError(msg='Refresh Token 已过期，请重新登录')
+            raise errors.TokenError(msg="Refresh Token 已过期，请重新登录")
         try:
             user_id = jwt_decode(refresh_token).id
         except Exception:
-            raise errors.TokenError(msg='Refresh Token 无效')
+            raise errors.TokenError(msg="Refresh Token 无效")
         async with async_db_session() as db:
             user = await user_dao.get(db, user_id)
             if not user:
-                raise errors.NotFoundError(msg='用户名或密码有误')
+                raise errors.NotFoundError(msg="用户名或密码有误")
             elif not user.status:
-                raise errors.AuthorizationError(msg='用户已被锁定, 请联系统管理员')
+                raise errors.AuthorizationError(msg="用户已被锁定, 请联系统管理员")
             new_token = await create_new_token(
                 user_id=str(user.id),
                 refresh_token=refresh_token,
@@ -174,13 +174,13 @@ class AuthService:
         refresh_token = request.cookies.get(settings.COOKIE_REFRESH_TOKEN_KEY)
         response.delete_cookie(settings.COOKIE_REFRESH_TOKEN_KEY)
         if request.user.is_multi_login:
-            await redis_client.delete(f'{settings.TOKEN_REDIS_PREFIX}:{user_id}:{token_payload.session_uuid}')
+            await redis_client.delete(f"{settings.TOKEN_REDIS_PREFIX}:{user_id}:{token_payload.session_uuid}")
             if refresh_token:
-                await redis_client.delete(f'{settings.TOKEN_REFRESH_REDIS_PREFIX}:{user_id}:{refresh_token}')
+                await redis_client.delete(f"{settings.TOKEN_REFRESH_REDIS_PREFIX}:{user_id}:{refresh_token}")
         else:
             key_prefix = [
-                f'{settings.TOKEN_REDIS_PREFIX}:{user_id}:',
-                f'{settings.TOKEN_REFRESH_REDIS_PREFIX}:{user_id}:',
+                f"{settings.TOKEN_REDIS_PREFIX}:{user_id}:",
+                f"{settings.TOKEN_REFRESH_REDIS_PREFIX}:{user_id}:",
             ]
             for prefix in key_prefix:
                 await redis_client.delete_prefix(prefix)

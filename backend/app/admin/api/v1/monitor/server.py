@@ -12,20 +12,20 @@ router = APIRouter()
 
 
 @router.get(
-    '',
-    summary='server 监控',
+    "",
+    summary="server 监控",
     dependencies=[
-        Depends(RequestPermission('sys:monitor:server')),
+        Depends(RequestPermission("sys:monitor:server")),
         DependsJwtAuth,
     ],
 )
 async def get_server_info() -> ResponseModel:
     data = {
         # 扔到线程池，避免阻塞
-        'cpu': await run_in_threadpool(server_info.get_cpu_info),
-        'mem': await run_in_threadpool(server_info.get_mem_info),
-        'sys': await run_in_threadpool(server_info.get_sys_info),
-        'disk': await run_in_threadpool(server_info.get_disk_info),
-        'service': await run_in_threadpool(server_info.get_service_info),
+        "cpu": await run_in_threadpool(server_info.get_cpu_info),
+        "mem": await run_in_threadpool(server_info.get_mem_info),
+        "sys": await run_in_threadpool(server_info.get_sys_info),
+        "disk": await run_in_threadpool(server_info.get_disk_info),
+        "service": await run_in_threadpool(server_info.get_service_info),
     }
     return response_base.success(data=data)

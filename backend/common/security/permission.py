@@ -59,14 +59,14 @@ def filter_data_permission(request: Request) -> ColumnElement[bool]:
     for rule in user_data_rules:
         rule_model = rule.model
         if rule_model not in settings.DATA_PERMISSION_MODELS:
-            raise errors.NotFoundError(msg='数据规则模型不存在')
+            raise errors.NotFoundError(msg="数据规则模型不存在")
         model_ins = dynamic_import_data_model(settings.DATA_PERMISSION_MODELS[rule_model])
         model_columns = [
             key for key in model_ins.__table__.columns.keys() if key not in settings.DATA_PERMISSION_COLUMN_EXCLUDE
         ]
         column = rule.column
         if column not in model_columns:
-            raise errors.NotFoundError(msg='数据规则模型列不存在')
+            raise errors.NotFoundError(msg="数据规则模型列不存在")
 
         # 获取模型的列对象
         column_obj = getattr(model_ins, column)
@@ -87,10 +87,10 @@ def filter_data_permission(request: Request) -> ColumnElement[bool]:
         elif rule_expression == RoleDataRuleExpressionType.le:
             condition = column_obj <= rule.value
         elif rule_expression == RoleDataRuleExpressionType.in_:
-            values = rule.value.split(',') if isinstance(rule.value, str) else rule.value
+            values = rule.value.split(",") if isinstance(rule.value, str) else rule.value
             condition = column_obj.in_(values)
         elif rule.expression == RoleDataRuleExpressionType.not_in:
-            values = rule.value.split(',') if isinstance(rule.value, str) else rule.value
+            values = rule.value.split(",") if isinstance(rule.value, str) else rule.value
             condition = ~column_obj.in_(values)
 
         if condition is not None:

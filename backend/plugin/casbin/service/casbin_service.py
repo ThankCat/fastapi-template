@@ -28,7 +28,7 @@ class CasbinService:
     async def get_policy_list(*, role: int | None = None) -> list:
         enforcer = await casbin_enforcer()
         if role is not None:
-            data = enforcer.get_filtered_named_policy('p', 0, str(role))
+            data = enforcer.get_filtered_named_policy("p", 0, str(role))
         else:
             data = enforcer.get_policy()
         return data
@@ -38,7 +38,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.add_policy(p.sub, p.path, p.method)
         if not data:
-            raise errors.ForbiddenError(msg='权限已存在')
+            raise errors.ForbiddenError(msg="权限已存在")
         return data
 
     @staticmethod
@@ -46,7 +46,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.add_policies([list(p.model_dump().values()) for p in ps])
         if not data:
-            raise errors.ForbiddenError(msg='权限已存在')
+            raise errors.ForbiddenError(msg="权限已存在")
         return data
 
     @staticmethod
@@ -56,7 +56,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         _p = enforcer.has_policy(old_obj.sub, old_obj.path, old_obj.method)
         if not _p:
-            raise errors.NotFoundError(msg='权限不存在')
+            raise errors.NotFoundError(msg="权限不存在")
         data = await enforcer.update_policy(
             [old_obj.sub, old_obj.path, old_obj.method], [new_obj.sub, new_obj.path, new_obj.method]
         )
@@ -75,7 +75,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         _p = enforcer.has_policy(p.sub, p.path, p.method)
         if not _p:
-            raise errors.NotFoundError(msg='权限不存在')
+            raise errors.NotFoundError(msg="权限不存在")
         data = await enforcer.remove_policy(p.sub, p.path, p.method)
         return data
 
@@ -84,7 +84,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.remove_policies([list(p.model_dump().values()) for p in ps])
         if not data:
-            raise errors.NotFoundError(msg='权限不存在')
+            raise errors.NotFoundError(msg="权限不存在")
         return data
 
     @staticmethod
@@ -104,7 +104,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.add_grouping_policy(g.uuid, g.role)
         if not data:
-            raise errors.ForbiddenError(msg='权限已存在')
+            raise errors.ForbiddenError(msg="权限已存在")
         return data
 
     @staticmethod
@@ -112,7 +112,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.add_grouping_policies([list(g.model_dump().values()) for g in gs])
         if not data:
-            raise errors.ForbiddenError(msg='权限已存在')
+            raise errors.ForbiddenError(msg="权限已存在")
         return data
 
     @staticmethod
@@ -120,7 +120,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         _g = enforcer.has_grouping_policy(g.uuid, g.role)
         if not _g:
-            raise errors.NotFoundError(msg='权限不存在')
+            raise errors.NotFoundError(msg="权限不存在")
         data = await enforcer.remove_grouping_policy(g.uuid, g.role)
         return data
 
@@ -129,7 +129,7 @@ class CasbinService:
         enforcer = await casbin_enforcer()
         data = await enforcer.remove_grouping_policies([list(g.model_dump().values()) for g in gs])
         if not data:
-            raise errors.NotFoundError(msg='权限不存在')
+            raise errors.NotFoundError(msg="权限不存在")
         return data
 
     @staticmethod

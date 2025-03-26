@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from backend.common.response.response_code import CustomResponse, CustomResponseCode
 from backend.utils.serializers import MsgSpecJSONResponse
 
-SchemaT = TypeVar('SchemaT')
+SchemaT = TypeVar("SchemaT")
 
 
 class ResponseModel(BaseModel):
@@ -17,20 +17,20 @@ class ResponseModel(BaseModel):
 
     E.g. ::
 
-        @router.get('/test', response_model=ResponseModel)
+        @router.get("/test", response_model=ResponseModel)
         def test():
-            return ResponseModel(data={'test': 'test'})
+            return ResponseModel(data={"test": "test"})
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseModel:
-            return ResponseModel(data={'test': 'test'})
+            return ResponseModel(data={"test": "test"})
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseModel:
             res = CustomResponseCode.HTTP_200
-            return ResponseModel(code=res.code, msg=res.msg, data={'test': 'test'})
+            return ResponseModel(code=res.code, msg=res.msg, data={"test": "test"})
     """
 
     code: int = CustomResponseCode.HTTP_200.code
@@ -44,17 +44,17 @@ class ResponseSchemaModel(ResponseModel, Generic[SchemaT]):
 
     E.g. ::
 
-        @router.get('/test', response_model=ResponseSchemaModel[GetApiDetail])
+        @router.get("/test", response_model=ResponseSchemaModel[GetApiDetail])
         def test():
             return ResponseSchemaModel[GetApiDetail](data=GetApiDetail(...))
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseSchemaModel[GetApiDetail]:
             return ResponseSchemaModel[GetApiDetail](data=GetApiDetail(...))
 
 
-        @router.get('/test')
+        @router.get("/test")
         def test() -> ResponseSchemaModel[GetApiDetail]:
             res = CustomResponseCode.HTTP_200
             return ResponseSchemaModel[GetApiDetail](code=res.code, msg=res.msg, data=GetApiDetail(...))
@@ -112,7 +112,7 @@ class ResponseBase:
         :param data:
         :return:
         """
-        return MsgSpecJSONResponse({'code': res.code, 'msg': res.msg, 'data': data})
+        return MsgSpecJSONResponse({"code": res.code, "msg": res.msg, "data": data})
 
 
 response_base: ResponseBase = ResponseBase()

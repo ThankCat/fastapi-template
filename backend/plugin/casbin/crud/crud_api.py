@@ -35,12 +35,12 @@ class CRUDApi(CRUDPlus[Api]):
         """
         filters = {}
         if name is not None:
-            filters.update(name__like=f'%{name}%')
+            filters.update(name__like=f"%{name}%")
         if method is not None:
             filters.update(method=method)
         if path is not None:
-            filters.update(path__like=f'%{path}%')
-        stmt = await self.select_order('created_time', 'desc', **filters)
+            filters.update(path__like=f"%{path}%")
+        stmt = await self.select_order("created_time", "desc", **filters)
         return stmt.where(filter_data_permission(request))
 
     async def get_all(self, db: AsyncSession) -> Sequence[Api]:

@@ -11,7 +11,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-sys.path.append('../')
+sys.path.append("../")
 
 from backend.common.model import MappedBase
 from backend.core import path_conf
@@ -47,7 +47,7 @@ if alembic_config.config_file_name is not None:
 target_metadata = MappedBase.metadata
 
 # other values from the config, defined by the needs of env.py,
-alembic_config.set_main_option('sqlalchemy.url', SQLALCHEMY_DATABASE_URL.render_as_string(hide_password=False))
+alembic_config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URL.render_as_string(hide_password=False))
 
 
 def run_migrations_offline():
@@ -62,12 +62,12 @@ def run_migrations_offline():
     script output.
 
     """
-    url = alembic_config.get_main_option('sqlalchemy.url')
+    url = alembic_config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={'paramstyle': 'named'},
+        dialect_opts={"paramstyle": "named"},
         compare_type=True,
         compare_server_default=True,
         transaction_per_migration=True,
@@ -84,7 +84,7 @@ def do_run_migrations(connection: Connection) -> None:
             script = directives[0]
             if script.upgrade_ops.is_empty():
                 directives[:] = []
-                print('\nNo changes in model detected')
+                print("\nNo changes in model detected")
 
     context.configure(
         connection=connection,
@@ -107,7 +107,7 @@ async def run_async_migrations() -> None:
 
     connectable = async_engine_from_config(
         alembic_config.get_section(alembic_config.config_ini_section, {}),
-        prefix='sqlalchemy.',
+        prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 

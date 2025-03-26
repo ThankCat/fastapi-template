@@ -14,23 +14,23 @@ from backend.common.security.rbac import DependsRBAC
 router = APIRouter()
 
 
-@router.get('/types', summary='获取代码生成模型列类型', dependencies=[DependsJwtAuth])
+@router.get("/types", summary="获取代码生成模型列类型", dependencies=[DependsJwtAuth])
 async def get_model_types() -> ResponseSchemaModel[list[str]]:
     model_types = await gen_model_service.get_types()
     return response_base.success(data=model_types)
 
 
-@router.get('/{pk}', summary='获取代码生成模型详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取代码生成模型详情", dependencies=[DependsJwtAuth])
 async def get_model(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetGenModelDetail]:
     data = await gen_model_service.get(pk=pk)
     return response_base.success(data=data)
 
 
 @router.post(
-    '',
-    summary='创建代码生成模型',
+    "",
+    summary="创建代码生成模型",
     dependencies=[
-        Depends(RequestPermission('gen:code:model:add')),
+        Depends(RequestPermission("gen:code:model:add")),
         DependsRBAC,
     ],
 )
@@ -40,10 +40,10 @@ async def create_model(obj: CreateGenModelParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新代码生成模型',
+    "/{pk}",
+    summary="更新代码生成模型",
     dependencies=[
-        Depends(RequestPermission('gen:code:model:edit')),
+        Depends(RequestPermission("gen:code:model:edit")),
         DependsRBAC,
     ],
 )
@@ -55,10 +55,10 @@ async def update_model(pk: Annotated[int, Path(...)], obj: UpdateGenModelParam) 
 
 
 @router.delete(
-    '/{pk}',
-    summary='删除代码生成模型',
+    "/{pk}",
+    summary="删除代码生成模型",
     dependencies=[
-        Depends(RequestPermission('gen:code:model:del')),
+        Depends(RequestPermission("gen:code:model:del")),
         DependsRBAC,
     ],
 )

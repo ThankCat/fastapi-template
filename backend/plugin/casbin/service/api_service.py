@@ -18,7 +18,7 @@ class ApiService:
         async with async_db_session() as db:
             api = await api_dao.get(db, pk)
             if not api:
-                raise errors.NotFoundError(msg='接口不存在')
+                raise errors.NotFoundError(msg="接口不存在")
             return api
 
     @staticmethod
@@ -36,7 +36,7 @@ class ApiService:
         async with async_db_session.begin() as db:
             api = await api_dao.get_by_name(db, obj.name)
             if api:
-                raise errors.ForbiddenError(msg='接口已存在')
+                raise errors.ForbiddenError(msg="接口已存在")
             await api_dao.create(db, obj)
 
     @staticmethod
@@ -44,7 +44,7 @@ class ApiService:
         async with async_db_session.begin() as db:
             api = await api_dao.get(db, pk)
             if not api:
-                raise errors.NotFoundError(msg='接口不存在')
+                raise errors.NotFoundError(msg="接口不存在")
             count = await api_dao.update(db, pk, obj)
             return count
 

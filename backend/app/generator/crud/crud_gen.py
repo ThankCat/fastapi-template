@@ -11,7 +11,7 @@ from backend.core.conf import settings
 class CRUDGen:
     @staticmethod
     async def get_all_tables(db: AsyncSession, table_schema: str) -> Sequence[str]:
-        if settings.DATABASE_TYPE == 'mysql':
+        if settings.DATABASE_TYPE == "mysql":
             sql = """
             SELECT table_name AS table_name FROM information_schema.tables 
             WHERE table_name NOT LIKE 'sys_gen_%' 
@@ -30,7 +30,7 @@ class CRUDGen:
 
     @staticmethod
     async def get_table(db: AsyncSession, table_name: str) -> Row[tuple]:
-        if settings.DATABASE_TYPE == 'mysql':
+        if settings.DATABASE_TYPE == "mysql":
             sql = """
             SELECT table_name AS table_name, table_comment AS table_comment FROM information_schema.tables 
             WHERE table_name NOT LIKE 'sys_gen_%' 
@@ -51,7 +51,7 @@ class CRUDGen:
 
     @staticmethod
     async def get_all_columns(db: AsyncSession, table_schema: str, table_name: str) -> Sequence[Row[tuple]]:
-        if settings.DATABASE_TYPE == 'mysql':
+        if settings.DATABASE_TYPE == "mysql":
             sql = """
             SELECT column_name AS column_name, 
             CASE WHEN column_key = 'PRI' THEN 1 ELSE 0 END AS is_pk, 
