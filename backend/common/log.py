@@ -91,7 +91,7 @@ def setup_logging():
 
     # Define the correlation_id default filter function
     # https://github.com/snok/asgi-correlation-id/issues/7
-    def correlation_id_filter(record):
+    def correlation_id_filter(record: dict) -> dict:
         """
         为日志记录添加关联 ID（correlation ID），并对关联 ID 进行长度截断处理，然后返回处理后的日志记录。
         """
@@ -102,7 +102,6 @@ def setup_logging():
         # 将获取到的关联 ID 截取前 settings.LOG_CID_UUID_LENGTH 个字符，
         # 并将其添加到日志记录的字典中，键名为 "correlation_id"。
         record["correlation_id"] = cid[: settings.LOG_CID_UUID_LENGTH]
-
         # 返回处理后的日志记录，以便后续的日志处理流程继续使用。
         return record
 
