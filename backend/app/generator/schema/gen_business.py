@@ -16,11 +16,11 @@ class GenBusinessSchemaBase(SchemaBase):
     table_comment: str | None = None
     schema_name: str | None = None
     default_datetime_column: bool = Field(default=True)
-    api_version: str = Field(default='v1')
+    api_version: str = Field(default="v1")
     gen_path: str | None = None
     remark: str | None = None
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_schema_name(self) -> Self:
         if self.schema_name is None:
             self.schema_name = self.table_name_en

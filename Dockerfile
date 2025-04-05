@@ -54,7 +54,7 @@ RUN mkdir -p /var/log/fastapi_server
 
 EXPOSE 8001
 
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port","8000"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port","8520"]
 
 # === Celery server image ===
 FROM base_server AS celery

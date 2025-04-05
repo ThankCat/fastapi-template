@@ -15,7 +15,7 @@ class TaskService:
     async def get_list() -> list[str]:
         registered_tasks = await run_in_threadpool(celery_app.control.inspect().registered)
         if not registered_tasks:
-            raise errors.ForbiddenError(msg='celery 服务未启动')
+            raise errors.ForbiddenError(msg="celery 服务未启动")
         tasks = list(registered_tasks.values())[0]
         return tasks
 
@@ -24,7 +24,7 @@ class TaskService:
         try:
             result = AsyncResult(id=tid, app=celery_app)
         except NotRegistered:
-            raise NotFoundError(msg='任务不存在')
+            raise NotFoundError(msg="任务不存在")
         return TaskResult(
             result=result.result,
             traceback=result.traceback,
@@ -42,7 +42,7 @@ class TaskService:
         try:
             result = AsyncResult(id=tid, app=celery_app)
         except NotRegistered:
-            raise NotFoundError(msg='任务不存在')
+            raise NotFoundError(msg="任务不存在")
         result.revoke(terminate=True)
 
     @staticmethod

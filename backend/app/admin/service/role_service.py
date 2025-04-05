@@ -27,7 +27,7 @@ class RoleService:
         async with async_db_session() as db:
             role = await role_dao.get_with_relation(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             return role
 
     @staticmethod
@@ -51,7 +51,7 @@ class RoleService:
         async with async_db_session.begin() as db:
             role = await role_dao.get_by_name(db, obj.name)
             if role:
-                raise errors.ForbiddenError(msg='角色已存在')
+                raise errors.ForbiddenError(msg="角色已存在")
             await role_dao.create(db, obj)
 
     @staticmethod
@@ -59,11 +59,11 @@ class RoleService:
         async with async_db_session.begin() as db:
             role = await role_dao.get(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             if role.name != obj.name:
                 role = await role_dao.get_by_name(db, obj.name)
                 if role:
-                    raise errors.ForbiddenError(msg='角色已存在')
+                    raise errors.ForbiddenError(msg="角色已存在")
             count = await role_dao.update(db, pk, obj)
             return count
 
@@ -72,14 +72,14 @@ class RoleService:
         async with async_db_session.begin() as db:
             role = await role_dao.get(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             for menu_id in menu_ids.menus:
                 menu = await menu_dao.get(db, menu_id)
                 if not menu:
-                    raise errors.NotFoundError(msg='菜单不存在')
+                    raise errors.NotFoundError(msg="菜单不存在")
             count = await role_dao.update_menus(db, pk, menu_ids)
             if pk in [role.id for role in request.user.roles]:
-                await redis_client.delete(f'{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}')
+                await redis_client.delete(f"{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}")
             return count
 
     @staticmethod
@@ -87,21 +87,21 @@ class RoleService:
         async with async_db_session.begin() as db:
             role = await role_dao.get(db, pk)
             if not role:
-                raise errors.NotFoundError(msg='角色不存在')
+                raise errors.NotFoundError(msg="角色不存在")
             for rule_id in rule_ids.rules:
                 rule = await data_rule_dao.get(db, rule_id)
                 if not rule:
-                    raise errors.NotFoundError(msg='数据权限不存在')
+                    raise errors.NotFoundError(msg="数据权限不存在")
             count = await role_dao.update_rules(db, pk, rule_ids)
             if pk in [role.id for role in request.user.roles]:
-                await redis_client.delete(f'{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}')
+                await redis_client.delete(f"{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}")
             return count
 
     @staticmethod
     async def delete(*, request: Request, pk: list[int]) -> int:
         async with async_db_session.begin() as db:
             count = await role_dao.delete(db, pk)
-            await redis_client.delete(f'{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}')
+            await redis_client.delete(f"{settings.JWT_USER_REDIS_PREFIX}:{request.user.id}")
             return count
 
 

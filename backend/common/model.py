@@ -13,7 +13,7 @@ from backend.utils.timezone import timezone
 # MappedBase -> id: Mapped[id_key]
 # DataClassBase && Base -> id: Mapped[id_key] = mapped_column(init=False)
 id_key = Annotated[
-    int, mapped_column(primary_key=True, index=True, autoincrement=True, sort_order=-999, comment='主键id')
+    int, mapped_column(primary_key=True, index=True, autoincrement=True, sort_order=-999, comment="主键id")
 ]
 
 
@@ -21,24 +21,24 @@ id_key = Annotated[
 class UserMixin(MappedAsDataclass):
     """用户 Mixin 数据类"""
 
-    created_by: Mapped[int] = mapped_column(sort_order=998, comment='创建者')
-    updated_by: Mapped[int | None] = mapped_column(init=False, default=None, sort_order=998, comment='修改者')
+    created_by: Mapped[int] = mapped_column(sort_order=998, comment="创建者")
+    updated_by: Mapped[int | None] = mapped_column(init=False, default=None, sort_order=998, comment="修改者")
 
 
 class DateTimeMixin(MappedAsDataclass):
     """日期时间 Mixin 数据类"""
 
     created_time: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), init=False, default_factory=timezone.now, sort_order=999, comment='创建时间'
+        DateTime(timezone=True), init=False, default_factory=timezone.now, sort_order=999, comment="创建时间"
     )
     updated_time: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), init=False, onupdate=timezone.now, sort_order=999, comment='更新时间'
+        DateTime(timezone=True), init=False, onupdate=timezone.now, sort_order=999, comment="更新时间"
     )
 
 
 class MappedBase(AsyncAttrs, DeclarativeBase):
     """
-    生命式基类, 作为所有基类或数据模型类的父类而存在
+    声明式基类, 作为所有基类或数据模型类的父类而存在
 
     `AsyncAttrs <https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html#sqlalchemy.ext.asyncio.AsyncAttrs>`__
     `DeclarativeBase <https://docs.sqlalchemy.org/en/20/orm/declarative_config.html>`__

@@ -46,7 +46,7 @@ class LoginLogService:
             )
             await login_log_dao.create(db, obj_in)
         except Exception as e:
-            log.error(f'登录日志创建失败: {e}')
+            log.error(f"登录日志创建失败: {e}")
 
     @staticmethod
     async def delete(*, pk: list[int]) -> int:

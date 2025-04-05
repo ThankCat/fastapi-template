@@ -27,7 +27,7 @@ class CRUDNotice(CRUDPlus[Notice]):
 
         :return:
         """
-        return await self.select_order('created_time', 'desc')
+        return await self.select_order("created_time", "desc")
 
     async def get_all(self, db: AsyncSession) -> Sequence[Notice]:
         """

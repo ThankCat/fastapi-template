@@ -14,19 +14,19 @@ from backend.common.security.rbac import DependsRBAC
 router = APIRouter()
 
 
-@router.get('/sidebar', summary='获取用户菜单展示树', dependencies=[DependsJwtAuth])
+@router.get("/sidebar", summary="获取用户菜单展示树", dependencies=[DependsJwtAuth])
 async def get_user_sidebar_tree(request: Request) -> ResponseSchemaModel[list[dict[str, Any]]]:
     menu = await menu_service.get_user_menu_tree(request=request)
     return response_base.success(data=menu)
 
 
-@router.get('/{pk}', summary='获取菜单详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取菜单详情", dependencies=[DependsJwtAuth])
 async def get_menu(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetMenuDetail]:
     data = await menu_service.get(pk=pk)
     return response_base.success(data=data)
 
 
-@router.get('', summary='获取所有菜单展示树', dependencies=[DependsJwtAuth])
+@router.get("", summary="获取所有菜单展示树", dependencies=[DependsJwtAuth])
 async def get_all_menus(
     title: Annotated[str | None, Query()] = None, status: Annotated[int | None, Query()] = None
 ) -> ResponseSchemaModel[list[dict[str, Any]]]:
@@ -35,10 +35,10 @@ async def get_all_menus(
 
 
 @router.post(
-    '',
-    summary='创建菜单',
+    "",
+    summary="创建菜单",
     dependencies=[
-        Depends(RequestPermission('sys:menu:add')),
+        Depends(RequestPermission("sys:menu:add")),
         DependsRBAC,
     ],
 )
@@ -48,10 +48,10 @@ async def create_menu(obj: CreateMenuParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新菜单',
+    "/{pk}",
+    summary="更新菜单",
     dependencies=[
-        Depends(RequestPermission('sys:menu:edit')),
+        Depends(RequestPermission("sys:menu:edit")),
         DependsRBAC,
     ],
 )
@@ -63,10 +63,10 @@ async def update_menu(pk: Annotated[int, Path(...)], obj: UpdateMenuParam) -> Re
 
 
 @router.delete(
-    '/{pk}',
-    summary='删除菜单',
+    "/{pk}",
+    summary="删除菜单",
     dependencies=[
-        Depends(RequestPermission('sys:menu:del')),
+        Depends(RequestPermission("sys:menu:del")),
         DependsRBAC,
     ],
 )

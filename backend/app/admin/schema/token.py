@@ -9,7 +9,7 @@ from backend.common.schema import SchemaBase
 
 class GetSwaggerToken(SchemaBase):
     access_token: str
-    token_type: str = 'Bearer'
+    token_type: str = "Bearer"
     user: GetUserInfoNoRelationDetail
 
 

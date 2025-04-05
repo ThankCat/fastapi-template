@@ -23,21 +23,21 @@ class AuthLoginParam(AuthSchemaBase):
 
 class RegisterUserParam(AuthSchemaBase):
     nickname: str | None = None
-    email: EmailStr = Field(examples=['user@example.com'])
+    email: EmailStr = Field(examples=["user@example.com"])
 
 
 class AddUserParam(AuthSchemaBase):
     dept_id: int
     roles: list[int]
     nickname: str | None = None
-    email: EmailStr = Field(examples=['user@example.com'])
+    email: EmailStr = Field(examples=["user@example.com"])
 
 
 class UserInfoSchemaBase(SchemaBase):
     dept_id: int | None = None
     username: str
     nickname: str
-    email: EmailStr = Field(examples=['user@example.com'])
+    email: EmailStr = Field(examples=["user@example.com"])
     phone: CustomPhoneNumber | None = None
 
 
@@ -50,7 +50,7 @@ class UpdateUserRoleParam(SchemaBase):
 
 
 class AvatarParam(SchemaBase):
-    url: HttpUrl = Field(description='头像 http 地址')
+    url: HttpUrl = Field(description="头像 http 地址")
 
 
 class GetUserInfoNoRelationDetail(UserInfoSchemaBase):
@@ -81,16 +81,16 @@ class GetCurrentUserInfoDetail(GetUserInfoDetail):
     dept: str | None = None
     roles: list[str]
 
-    @model_validator(mode='before')
+    @model_validator(mode="before")
     @classmethod
     def handel(cls, data: Any) -> Self:
         """处理部门和角色"""
-        dept = data['dept']
+        dept = data["dept"]
         if dept:
-            data['dept'] = dept['name']
-        roles = data['roles']
+            data["dept"] = dept["name"]
+        roles = data["roles"]
         if roles:
-            data['roles'] = [role['name'] for role in roles]
+            data["roles"] = [role["name"] for role in roles]
         return data
 
 

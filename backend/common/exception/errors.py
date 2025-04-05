@@ -12,8 +12,8 @@ from typing import Any
 from fastapi import HTTPException
 from starlette.background import BackgroundTask
 
-from backend.common.response.response_code import CustomErrorCode, StandardResponseCode
 from backend.common.log import log
+from backend.common.response.response_code import CustomErrorCode, StandardResponseCode
 
 
 class BaseExceptionMixin(Exception):

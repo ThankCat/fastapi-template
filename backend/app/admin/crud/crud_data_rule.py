@@ -31,7 +31,7 @@ class CRUDDataRule(CRUDPlus[DataRule]):
         stmt = select(self.model).options(noload(self.model.roles)).order_by(desc(self.model.created_time))
         where_list = []
         if name is not None:
-            where_list.append(self.model.name.like(f'%{name}%'))
+            where_list.append(self.model.name.like(f"%{name}%"))
         if where_list:
             stmt = stmt.where(*where_list)
         return stmt

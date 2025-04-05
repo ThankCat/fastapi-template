@@ -17,7 +17,7 @@ class GenModelSchemaBase(SchemaBase):
     is_nullable: bool = Field(default=False)
     gen_business_id: int | None = Field(ge=1)
 
-    @field_validator('type')
+    @field_validator("type")
     @classmethod
     def type_update(cls, v):
         return sql_type_to_sqlalchemy(v)

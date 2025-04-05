@@ -78,7 +78,7 @@ class CRUDRole(CRUDPlus[Role]):
         )
         where_list = []
         if name:
-            where_list.append(self.model.name.like(f'%{name}%'))
+            where_list.append(self.model.name.like(f"%{name}%"))
         if status is not None:
             where_list.append(self.model.status == status)
         if where_list:

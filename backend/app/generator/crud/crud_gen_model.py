@@ -26,7 +26,7 @@ class CRUDGenModel(CRUDPlus[GenModel]):
         :param business_id:
         :return:
         """
-        return await self.select_models_order(db, sort_columns='sort', gen_business_id=business_id)
+        return await self.select_models_order(db, sort_columns="sort", gen_business_id=business_id)
 
     async def create(self, db: AsyncSession, obj_in: CreateGenModelParam, pd_type: str | None = None) -> None:
         """

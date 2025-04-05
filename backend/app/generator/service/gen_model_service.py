@@ -35,7 +35,7 @@ class GenModelService:
         async with async_db_session.begin() as db:
             gen_models = await gen_model_dao.get_all_by_business_id(db, obj.gen_business_id)
             if obj.name in [gen_model.name for gen_model in gen_models]:
-                raise errors.ForbiddenError(msg='禁止添加相同列到同一模型表')
+                raise errors.ForbiddenError(msg="禁止添加相同列到同一模型表")
             pd_type = sql_type_to_pydantic(obj.type)
             await gen_model_dao.create(db, obj, pd_type=pd_type)
 
@@ -46,7 +46,7 @@ class GenModelService:
             if obj.name != model.name:
                 gen_models = await gen_model_dao.get_all_by_business_id(db, obj.gen_business_id)
                 if obj.name in [gen_model.name for gen_model in gen_models]:
-                    raise errors.ForbiddenError(msg='模型列名已存在')
+                    raise errors.ForbiddenError(msg="模型列名已存在")
             pd_type = sql_type_to_pydantic(obj.type)
             count = await gen_model_dao.update(db, pk, obj, pd_type=pd_type)
             return count

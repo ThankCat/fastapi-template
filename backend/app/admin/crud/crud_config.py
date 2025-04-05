@@ -52,9 +52,9 @@ class CRUDConfig(CRUDPlus[Config]):
         :param built_in:
         :return:
         """
-        filters = {'key': key}
+        filters = {"key": key}
         if not built_in:
-            filters.update({'type__not_in': admin_settings.CONFIG_BUILT_IN_TYPES})
+            filters.update({"type__not_in": admin_settings.CONFIG_BUILT_IN_TYPES})
         return await self.select_model_by_column(db, **filters)
 
     async def get_list(self, name: str = None, type: str = None) -> Select:
@@ -65,12 +65,12 @@ class CRUDConfig(CRUDPlus[Config]):
         :param type:
         :return:
         """
-        filters = {'type__not_in': admin_settings.CONFIG_BUILT_IN_TYPES}
+        filters = {"type__not_in": admin_settings.CONFIG_BUILT_IN_TYPES}
         if name is not None:
-            filters.update(name__like=f'%{name}%')
+            filters.update(name__like=f"%{name}%")
         if type is not None:
-            filters.update(type__like=f'%{type}%')
-        return await self.select_order('created_time', 'desc', **filters)
+            filters.update(type__like=f"%{type}%")
+        return await self.select_order("created_time", "desc", **filters)
 
     async def create(self, db: AsyncSession, obj_in: CreateConfigParam) -> None:
         """

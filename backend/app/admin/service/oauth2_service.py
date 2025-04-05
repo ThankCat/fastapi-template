@@ -31,25 +31,25 @@ class OAuth2Service:
     ) -> GetLoginToken | None:
         async with async_db_session.begin() as db:
             # 获取 OAuth2 平台用户信息
-            social_id = user.get('id')
-            social_username = user.get('username')
+            social_id = user.get("id")
+            social_username = user.get("username")
             if social == UserSocialType.github:
-                social_username = user.get('login')
-            social_nickname = user.get('name')
-            social_email = user.get('email')
+                social_username = user.get("login")
+            social_nickname = user.get("name")
+            social_email = user.get("email")
             if social == UserSocialType.linuxdo:  # 不提供明文邮箱的平台
-                social_email = f'{social_username}@linux.do'
+                social_email = f"{social_username}@linux.do"
             if not social_email:
-                raise AuthorizationError(msg=f'授权失败，{social.value} 账户未绑定邮箱')
+                raise AuthorizationError(msg=f"授权失败，{social.value} 账户未绑定邮箱")
             # 创建系统用户
             sys_user = await user_dao.check_email(db, social_email)
             if not sys_user:
                 sys_user = await user_dao.get_by_username(db, social_username)
                 if sys_user:
-                    social_username = f'{social_username}#{text_captcha(5)}'
+                    social_username = f"{social_username}#{text_captcha(5)}"
                 sys_user = await user_dao.get_by_nickname(db, social_nickname)
                 if sys_user:
-                    social_username = f'{social_nickname}#{text_captcha(5)}'
+                    social_username = f"{social_nickname}#{text_captcha(5)}"
                 new_sys_user = RegisterUserParam(
                     username=social_username, password=None, nickname=social_username, email=social_email
                 )
@@ -85,10 +85,10 @@ class OAuth2Service:
                 username=sys_user.username,
                 login_time=timezone.now(),
                 status=LoginLogStatusType.success.value,
-                msg='登录成功（OAuth2）',
+                msg="登录成功（OAuth2）",
             )
             background_tasks.add_task(login_log_service.create, **login_log)
-            await redis_client.delete(f'{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}')
+            await redis_client.delete(f"{admin_settings.CAPTCHA_LOGIN_REDIS_PREFIX}:{request.state.ip}")
             response.set_cookie(
                 key=settings.COOKIE_REFRESH_TOKEN_KEY,
                 value=refresh_token.refresh_token,

@@ -12,8 +12,8 @@ class CasbinSettings(BaseSettings):
 
     # RBAC
     RBAC_CASBIN_EXCLUDE: set[tuple[str, str]] = {
-        ('POST', f'{settings.FASTAPI_API_V1_PATH}/auth/logout'),
-        ('POST', f'{settings.FASTAPI_API_V1_PATH}/auth/token/new'),
+        ("POST", f"{settings.FASTAPI_API_V1_PATH}/auth/logout"),
+        ("POST", f"{settings.FASTAPI_API_V1_PATH}/auth/token/new"),
     }
 
 

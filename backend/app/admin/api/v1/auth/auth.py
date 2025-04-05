@@ -12,7 +12,6 @@ from backend.app.admin.schema.user import AuthLoginParam
 from backend.app.admin.service.auth_service import auth_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.common.security.jwt import DependsJwtAuth
-from backend.common.exception.errors import MustError
 
 router = APIRouter()
 

@@ -11,13 +11,13 @@ def sql_type_to_sqlalchemy(typing: str) -> str:
     :param typing:
     :return:
     """
-    if settings.DATABASE_TYPE == 'mysql':
+    if settings.DATABASE_TYPE == "mysql":
         if typing in GenModelMySQLColumnType.get_member_keys():
             return typing
     else:
         if typing in GenModelPostgreSQLColumnType.get_member_keys():
             return typing
-    return 'String'
+    return "String"
 
 
 def sql_type_to_pydantic(typing: str) -> str:
@@ -28,11 +28,11 @@ def sql_type_to_pydantic(typing: str) -> str:
     :return:
     """
     try:
-        if settings.DATABASE_TYPE == 'mysql':
+        if settings.DATABASE_TYPE == "mysql":
             return GenModelMySQLColumnType[typing].value
         else:
-            if typing == 'CHARACTER VARYING':  # postgresql 中 DDL VARCHAR 的别名
-                return 'str'
+            if typing == "CHARACTER VARYING":  # postgresql 中 DDL VARCHAR 的别名
+                return "str"
             return GenModelPostgreSQLColumnType[typing].value
     except KeyError:
-        return 'str'
+        return "str"

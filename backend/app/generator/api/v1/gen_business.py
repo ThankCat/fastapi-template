@@ -20,30 +20,30 @@ from backend.common.security.rbac import DependsRBAC
 router = APIRouter()
 
 
-@router.get('/all', summary='获取所有代码生成业务', dependencies=[DependsJwtAuth])
+@router.get("/all", summary="获取所有代码生成业务", dependencies=[DependsJwtAuth])
 async def get_all_businesses() -> ResponseSchemaModel[list[GetGenBusinessDetail]]:
     data = await gen_business_service.get_all()
     return response_base.success(data=data)
 
 
-@router.get('/{pk}', summary='获取代码生成业务详情', dependencies=[DependsJwtAuth])
+@router.get("/{pk}", summary="获取代码生成业务详情", dependencies=[DependsJwtAuth])
 async def get_business(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[GetGenBusinessDetail]:
     data = await gen_business_service.get(pk=pk)
     return response_base.success(data=data)
 
 
-@router.get('/{pk}/models', summary='获取代码生成业务所有模型', dependencies=[DependsJwtAuth])
+@router.get("/{pk}/models", summary="获取代码生成业务所有模型", dependencies=[DependsJwtAuth])
 async def get_business_all_models(pk: Annotated[int, Path(...)]) -> ResponseSchemaModel[list[GetGenModelDetail]]:
     data = await gen_model_service.get_by_business(business_id=pk)
     return response_base.success(data=data)
 
 
 @router.post(
-    '',
-    summary='创建代码生成业务',
+    "",
+    summary="创建代码生成业务",
     deprecated=True,
     dependencies=[
-        Depends(RequestPermission('gen:code:business:add')),
+        Depends(RequestPermission("gen:code:business:add")),
         DependsRBAC,
     ],
 )
@@ -53,10 +53,10 @@ async def create_business(obj: CreateGenBusinessParam) -> ResponseModel:
 
 
 @router.put(
-    '/{pk}',
-    summary='更新代码生成业务',
+    "/{pk}",
+    summary="更新代码生成业务",
     dependencies=[
-        Depends(RequestPermission('gen:code:business:edit')),
+        Depends(RequestPermission("gen:code:business:edit")),
         DependsRBAC,
     ],
 )
@@ -68,10 +68,10 @@ async def update_business(pk: Annotated[int, Path(...)], obj: UpdateGenBusinessP
 
 
 @router.delete(
-    '/{pk}',
-    summary='删除代码生成业务',
+    "/{pk}",
+    summary="删除代码生成业务",
     dependencies=[
-        Depends(RequestPermission('gen:code:business:del')),
+        Depends(RequestPermission("gen:code:business:del")),
         DependsRBAC,
     ],
 )
